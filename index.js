@@ -1,3 +1,9 @@
-import { getHTML } from "./lib/scraper";
+import { getHTML, getStoriesData } from "./lib/scraper";
 
-console.log(getHTML());
+async function go() {
+  getStoriesData(
+    await getHTML("http://fiftywordstories.com/category/stories/")
+  );
+}
+
+go();
