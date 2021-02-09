@@ -1,5 +1,6 @@
-import getStoriesData from "./lib/scraper";
 import express from "express";
+import getStoriesData from "./lib/scraper";
+import db from "./lib/db";
 const hostname = "127.0.0.1";
 const port = 2093;
 
