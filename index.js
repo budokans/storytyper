@@ -16,7 +16,10 @@ app.get("/scrape", async (req, res, next) => {
 
   stories.forEach((story) => {
     story.dateScraped = Date.now();
-    db.get("stories").push(story).write();
+
+    story.author
+      ? db.get("stories").push(story).write()
+      : db.get("storiesToEdit").push(story).write();
   });
 
   res.json(stories);
