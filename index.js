@@ -13,6 +13,12 @@ app.get("/scrape", async (req, res, next) => {
   );
 
   console.log("Scraping complete!");
+
+  stories.forEach((story) => {
+    story.dateScraped = Date.now();
+    db.get("stories").push(story).write();
+  });
+
   res.json(stories);
 });
 
