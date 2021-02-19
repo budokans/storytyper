@@ -6,18 +6,6 @@ const port = 2094;
 
 const app = express();
 
-// // const lastStoryId = db.get(`stories[0].id`).value();
-// async function go() {
-//   const storiesPromise = getStoriesData(
-//     "http://fiftywordstories.com/category/stories/"
-//   );
-//   const [stories, scrapeCount] = await storiesPromise;
-//   console.log(storiesPromise);
-//   console.log(stories, scrapeCount);
-// }
-
-// go();
-
 app.get("/scrape", async (req, res, next) => {
   console.log("Scraping!");
 
@@ -28,13 +16,13 @@ app.get("/scrape", async (req, res, next) => {
       console.log(
         `Scraping complete: ${scrapeCount} stories successfully scraped over ${pageCount} pages`
       );
-      stories.forEach((story) => {
+      stories.reverse().forEach((story) => {
         story.dateScraped = Date.now();
 
         // Check if the story has an author. If not, push to storiesToEdit array
         story.author
-          ? db.get("stories").push(story).write()
-          : db.get("storiesToEdit").push(story).write();
+          ? db.get("stories").unshift(story).write()
+          : db.get("storiesToEdit").unshift(story).write();
       });
 
       res.json(stories);
