@@ -9,7 +9,7 @@ const app = express();
 app.get("/scrape", async (req, res, next) => {
   console.log("Scraping!");
 
-  scrapeStories("http://fiftywordstories.com/category/stories/")
+  scrapeStories("http://fiftywordstories.com/category/stories")
     .then((result) => result)
     .then((storiesData) => {
       const { stories, scrapeCount, pageCount } = storiesData;
