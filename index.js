@@ -17,7 +17,8 @@ app.get("/scrape", async (req, res, next) => {
         `Scraping complete: ${scrapeCount} stories successfully scraped over ${pageCount} pages`
       );
       stories.reverse().forEach((story) => {
-        story.dateScraped = Date.now();
+        const date = new Date();
+        story.dateScraped = date.toUTCString();
 
         // Check if the story has an author. If not, push to storiesToEdit array
         story.author
