@@ -9,12 +9,11 @@ const app = express();
 app.get("/scrape", async (req, res, next) => {
   console.log("Scraping!");
 
-  scrapeStories("http://fiftywordstories.com/category/stories").then(
-    (storiesData) => {
-      const { stories } = storiesData;
-      res.json(stories);
-    }
+  const storiesData = await scrapeStories(
+    "http://fiftywordstories.com/category/stories"
   );
+  const { stories } = storiesData;
+  res.json(stories);
 });
 
 app.listen(port, () => {
