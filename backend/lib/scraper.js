@@ -69,18 +69,15 @@ async function getStoriesData(url) {
 }
 
 // Scrape the next page after a randomized interval
-function waitToScrape(url) {
+async function waitToScrape(url) {
   const randNumBetween3And7 = (Math.random() * 4 + 3) * 1000;
 
-  const wait = (ms) =>
-    new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(scrapeStories(url));
-      }, ms);
-      console.log(`Scraping next page in ${ms} milliseconds...`);
-    });
+  console.log(`Scraping next page in ${randNumBetween3And7} milliseconds...`);
 
-  return wait(randNumBetween3And7);
+  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  await sleep(randNumBetween3And7);
+  return await getStoriesData(url);
 }
 
 // Scrape url for new stories

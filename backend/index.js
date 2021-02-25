@@ -10,7 +10,7 @@ const port = 2094;
 const app = express();
 app.use(cors());
 
-app.get("/scrape", async (req, res, next) => {
+app.get("/scrape", async (req, res) => {
   console.log("Scraping!");
 
   const storiesData = await scrapeStories(
@@ -20,7 +20,7 @@ app.get("/scrape", async (req, res, next) => {
   res.json(stories);
 });
 
-app.get("/data", async (req, res, next) => {
+app.get("/data", async (req, res) => {
   console.log("Getting stories from database...");
 
   const stories = db.get("stories");
