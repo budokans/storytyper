@@ -13,7 +13,7 @@ async function getHTML(url) {
   return html;
 }
 
-// Capture the data from each story post
+// Capture the data from each story post in an object and push to an array
 async function getStoriesData(url) {
   const html = await getHTML(url);
   const $ = cheerio.load(html);
@@ -60,7 +60,6 @@ async function getStoriesData(url) {
 
   // Get the link to the next oldest page if it exists
   const paginationLink = $(".nav-previous a").attr("href");
-
   return {
     stories: storiesArray,
     scrapeCount: scrapeCount,
@@ -69,7 +68,7 @@ async function getStoriesData(url) {
   };
 }
 
-// Scrapes the next page after a randomized interval
+// Scrape the next page after a randomized interval
 function waitToScrape(url) {
   const randNumBetween3And7 = (Math.random() * 4 + 3) * 1000;
 
@@ -84,6 +83,7 @@ function waitToScrape(url) {
   return wait(randNumBetween3And7);
 }
 
+// Scrape url for new stories
 export async function scrapeStories(url) {
   const storiesFragment = await getStoriesData(url);
 
@@ -108,6 +108,7 @@ export async function scrapeStories(url) {
   }
 }
 
+// Run scrapeStories on a schedule
 export async function runCron() {
   console.log("Scraping!");
 
