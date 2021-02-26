@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useThemeContext } from "../context/themeContext";
 import useModalToggler from "../hooks/useModalToggler";
 import parse from "html-react-parser";
@@ -14,6 +14,11 @@ export default function StoryBox({ currentStory, gameIsOver }) {
   function toggleFormatting() {
     setFormattedIsShowing(!formattedIsShowing);
   }
+
+  // Ensure that formatted version is not shown when a new story is loaded.
+  useEffect(() => {
+    setFormattedIsShowing(false);
+  }, [currentStory]);
 
   const { theme } = useThemeContext();
 
@@ -32,19 +37,25 @@ export default function StoryBox({ currentStory, gameIsOver }) {
 
   return (
     <div className={wrapperClass}>
-      {gameIsOver && (
-        <header className="gameplay-box--story__header">
-          <strong>{currentStory.title}</strong> by {currentStory.author}
-        </header>
-      )}
+      {
+        // Show header with title and author when game ends
+        gameIsOver && (
+          <header className="gameplay-box--story__header">
+            <strong>{currentStory.title}</strong> by {currentStory.author}
+          </header>
+        )
+      }
 
-      {formattedIsShowing ? (
-        <div className="gameplay-box--story__text">
-          {currentStory.storyText && parse(currentStory.storyHTML)}
-        </div>
-      ) : (
-        <p className="gameplay-box--story__text">{currentStory.storyText}</p>
-      )}
+      {
+        // Show text with original formatting if the Original Formatting button has been clicked, otherwise show the condensed version for gameplay.
+        formattedIsShowing ? (
+          <div className="gameplay-box--story__text">
+            {currentStory.storyText && parse(currentStory.storyHTML)}
+          </div>
+        ) : (
+          <p className="gameplay-box--story__text">{currentStory.storyText}</p>
+        )
+      }
 
       {gameIsOver && (
         <>

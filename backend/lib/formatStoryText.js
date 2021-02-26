@@ -2,12 +2,10 @@ export default function formatStoryText(text) {
   // Removes html markup and trims whitespace from edges
   let formattedText = "";
   formattedText = text
-    // Removes opening HTML tags
-    .replace(/(<[a-z]>)/g, "")
-    // Turns <br> into a single space
-    .replace(/(<[a-z]+>)/g, " ")
-    // Replaces closing HTML tags with a single space.
-    .replace(/(<\/[a-z]+>)/g, " ")
+    // Replace all HTML tags with a space
+    .replace(/<.+?>/g, " ")
+    // Replace multiple consecutive spaces with a single space
+    .replace(/  +/g, " ")
     .trim();
 
   // Replaces typographic characters with ASCII characters
