@@ -42,6 +42,7 @@ export default function Home() {
 
   const { theme } = useThemeContext();
 
+  // Set body background color once the document object has loaded
   useEffect(() => {
     document.body.style.backgroundColor =
       theme === "light" ? "#faf0e6" : "black";
@@ -50,7 +51,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <meta charset="UTF-8" />
+        <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Speed Typer v1.0</title>
         <link
