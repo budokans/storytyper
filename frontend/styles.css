@@ -1,0 +1,742 @@
+@import "./node_modules/normalize.css/normalize.css";
+
+/**
+ * CONTENTS
+ *
+ * Normalize.css........A level playing field.
+ * More resets..........Personal resets in addition to normalize.css
+ * Variables............Custom color properties
+ * Base.................Body element styles
+ * Header...............Header and subtext styles
+ * Game Container.......Outer wrapper all game-related components
+ * Gameplay Container...Wrapper of left column - the gameplay components
+ * Gameplay Boxes.......The two main gameplay components
+    1. Story Box
+    2. Typing Box
+ * Modal................Styles for all modal types
+ * Game HUD.............Styles for the in-game alert/feedback components
+    1. Error Alert
+    2. Countdown Display
+    3. Game-time Display
+ * Side Panel...........The right-hand panel used for results display
+ * Buttons..............Styles for buttons that aren't semantically related to
+   their encapsulating block, i.e. those that can be used anywhere.
+ * Utility classes......Various color-related and other handy classes
+ */
+
+
+/*------------------------------------*\
+  #MORE RESETS
+\*------------------------------------*/
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+textarea {
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+button {
+  border-width: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+button:focus {
+  outline: none;
+}
+
+ul,
+ol,
+dd {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+}
+
+
+
+
+
+/*------------------------------------*\
+  #VARIABLES
+\*------------------------------------*/
+
+:root {
+--bg-main-light: linen;
+--bg-main-dark: black;
+
+--bg-box-lighter: white;
+--bg-box-light: linen;
+--bg-box-darker: #f4dfc9;
+--bg-box-even-darker: #e9bc90;
+--bg-box-failure: #ff8080;
+
+--text-main-light: lime;
+--text-main-dark: #00db00;
+--text-main-darker: #00BC00;
+--text-dark: black;
+--text-light: linen;
+--text-rich: gold;
+--text-rich-darker: #dbba00;
+--text-failure: red;
+--text-inert: #808080;
+--text-inert-lighter: lightgrey;
+--text-inert-darker: darkslategrey;
+--text-scary: #3c7ebb;
+--text-godlike: #866cc7;
+}
+
+
+
+
+
+/*------------------------------------*\
+  #BASE
+\*------------------------------------*/
+
+body {
+  background: var(--bg-main-dark);
+  font-family: "Press Start 2P";
+  text-align: center;
+  padding: 3em 2em;
+}
+
+@media (max-height: 760px) {
+  body {
+    padding: 2em 1.5em;
+  }
+}
+
+
+
+
+/*------------------------------------*\
+  #HEADER
+\*------------------------------------*/
+
+.main-header {
+  margin-bottom: 1em;
+}
+
+  .main-header__title {
+    margin-top:    0em;
+    margin-bottom: 0.5em;
+    font-size: 3em;
+  }
+
+  .main-header__subtext {
+    font-size: 0.8em;
+    line-height: 1.5em;
+  }
+
+.main-header--dark-theme {
+  color: var(--text-main-light);
+}
+
+.main-header--light-theme {
+  color: var(--text-main-dark)
+}
+
+
+
+
+
+/*------------------------------------*\
+  #GAME CONTAINER
+\*------------------------------------*/
+
+.game-container {
+  margin: 0 auto;
+  padding-top: 0.7em;
+  display: grid;
+  grid-template-columns: 7fr 3fr;
+  max-width: 55em;
+  gap: 1em;
+}
+
+
+
+
+
+/*------------------------------------*\
+  #GAMEPLAY CONTAINER (LEFT SIDE)
+\*------------------------------------*/
+
+.gameplay-container {
+  display: grid;
+  gap: 1em;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: min-content;
+  grid-column: 1;
+}
+
+
+
+
+
+/*------------------------------------*\
+  #GAMEPLAY BOXES
+
+  [1] #STORY BOX
+  [2] #TYPING BOX
+\*------------------------------------*/
+
+.gameplay-box {
+  padding: 2em 2.5em;
+  line-height: 1.5em;
+  font-size: 0.8em;
+  grid-column: 1 / -1;
+  text-align: left;
+}
+
+
+/* [1] #STORY BOX */
+
+.gameplay-box--story {
+  color: var(--text-dark);
+  max-height: 19em;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 50% 50%;
+}
+
+.gameplay-box--story--dark-theme {
+  background: var(--bg-box-light);
+}
+
+.gameplay-box--story--light-theme {
+  background: var(--bg-box-lighter);
+  border: 1px solid var(--bg-box-darker);
+}
+
+.gameplay-box--expanded { 
+  max-height: 34em;
+}
+
+  .gameplay-box--story__message {
+    grid-column: 1 / -1;
+    color: var(--text-inert);
+  }
+
+  .gameplay-box--story__header {
+    text-align: center;
+    grid-column: 1 / -1;
+    margin: 1em auto;
+    font-size: 1.2em;
+    line-height: 1.7;
+  }
+
+  .gameplay-box--story__text {
+    margin-top: 0;
+    margin-bottom: 3em;
+    grid-column: 1 / -1;
+  }
+
+  .gameplay-box--story__btn {
+    font-weight: bold;
+    font-size:   0.8em;
+    background: var(--bg-box-darker);
+    width:  95%;
+    height: 4em;
+    justify-self: center;
+    line-height: 1.5;
+    padding: 0.7em 1.5em;
+    border: 2px solid var(--bg-box-even-darker);
+    grid-row: 3;
+  }
+
+    .gameplay-box--story__btn:hover,
+    .gameplay-box--story__btn--clicked {
+      background: var(--bg-box-even-darker);
+    }
+  
+  .gameplay-box--story__attribution {
+    margin-top: 2em;
+    margin-bottom: 0;
+    font-size: 0.8em;
+  }
+
+
+/* [2] #TYPING BOX */
+
+/* The textarea needs exactly this height to prevent it from displaying with
+a scrollbar */
+.gameplay-box--input {
+  background: var(--text-inert-lighter);
+  color: var(--text-dark);
+  height: 5.5em;
+  resize: none;
+  outline: none;
+  border: none;
+  transition: background-color 0.5s ease;
+  cursor: pointer;
+}
+
+.gameplay-box--input--light-theme {
+  border: 1px solid var(--bg-box-darker);
+  height: 5.63em;
+}
+
+  .gameplay-box--input:focus {
+    background-color: var(--bg-box-lighter);
+  }
+
+  /* In order to apply these styles while the textarea is in focus (above), this 
+  selector needs to have a higher specificity than .gameplay-box--input:focus. 
+  Hence the double-chaining. */
+  .gameplay-box--error.gameplay-box--error {
+    background-color: var(--bg-box-failure);
+  }
+
+  .gameplay-box--input::placeholder {
+    color: var(--text-inert-darker);
+  }
+
+
+
+
+
+/*------------------------------------*\
+  #MODAL
+\*------------------------------------*/
+
+.modal {
+  position: fixed; /* Sit on top of the page content */
+  width:  100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top:  0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.7); /* Black background with opacity */
+  z-index: 2;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s linear;
+}
+
+.modal--bg-transparent--dark-theme {
+  background-color: rgba(0, 0, 0, 0.97);
+  color: var(--text-light);
+}
+
+.modal--bg-transparent--light-theme {
+  background-color: rgba(255, 255, 255, 0.97);
+  color: var(--text-dark);
+}
+
+.modal--visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+  .modal__body {
+    max-width: 35em;
+    margin: 15em auto;
+    background: var(--bg-main-light);
+    padding: 1.5em 2em 2.5em 2.5em;
+    display: grid;
+    grid-template-columns: 90% 10%;
+    border: 2px solid var(--bg-box-even-darker);
+  }
+
+  .modal__body--bg-dark {
+    background: black;
+    color: var(--text-light);
+  }
+
+  .modal__body--alert {
+    max-width: 65em;
+    text-transform: uppercase;
+    padding-bottom: 4em;
+  }
+
+  .modal__body--bg-transparent {
+    background: none;
+  }
+
+    .modal__header {
+      grid-column: 1;
+      font-size:   0.9em;
+      font-weight: bold;
+      align-self:   end;
+      justify-self: center;
+      text-transform: uppercase;
+    }
+
+    .modal__header--xl {
+      margin: 0.8em auto;
+      font-size: 3em;
+    }
+
+    /* The left margin applied here is to align the text with .modal__list */
+    .modal__header--align-left {
+      justify-self: start;
+      margin-left: 1.85em;
+    }
+
+    .modal__subheader {
+      margin: 1.1em auto;
+    }
+
+    .modal__btn-close {
+      grid-column: 2;
+      background-color: inherit;
+      color: inherit;
+      width:  auto;
+      height: auto;
+      justify-self: end;
+      align-self:   start;
+      font-weight: bold;
+      font-size:   1.1em;
+      line-height: 0.8;
+      margin-bottom: 0.5em;
+    }
+    
+    .modal__list {
+      grid-column: 1;
+      grid-row:    3;
+      text-align: left;
+      width: 90%;
+      margin: 1em 0 2em 1.5em;
+      font-size: 1.1em;
+      line-height: 2em;
+    }
+
+    
+
+    
+
+/*------------------------------------*\
+  #GAME HEADS UP DISPLAY
+
+  [1] #ERROR ALERT
+  [2] #COUNTDOWN DISPLAY
+  [3] #GAME-TIME DISPLAY
+\*------------------------------------*/
+
+/* [1] #ERROR ALERT */
+
+.alert-error {
+  grid-column: 1;
+  justify-self: start;
+  color: var(--text-failure);
+  text-transform: uppercase;
+  margin: 0;
+  font-size: 0.7em;
+}
+
+
+/* [2] #COUNTDOWN DISPLAY */
+
+.countdown-text {
+  font-size: 1.7em;
+  margin: 0;
+  transition: font-size 1s ease-out;
+  text-transform: uppercase;
+  grid-column: 2;
+  justify-self: center;
+}
+
+.countdown-text--dark-theme {
+  color: var(--text-rich);
+}
+
+.countdown-text--light-theme {
+  color: var(--text-dark);
+}
+
+  .countdown-text--go--dark-theme {
+    color: var(--text-main-light);
+  }
+
+  .countdown-text--go--light-theme {
+    color: var(--text-main-dark);
+  }
+
+  .countdown-text--collapsed {
+    font-size: 0;
+  }
+
+
+/* [3] #GAME-TIME DISPLAY */
+
+.game-time-display {
+  grid-column: 3;
+  text-align: right;
+}
+
+.game-time-display--dark-theme {
+  color: var(--text-main-light);
+}
+
+.game-time-display--light-theme {
+  color: var(--text-main-dark);
+}
+
+
+  .game-time-display__count {
+    font-size: 2.5em;
+    margin: 0;
+  }
+
+  .game-time-display__subtext {
+    margin-top:    0;
+    margin-bottom: 0;
+    text-transform: uppercase;
+    line-height: 1.5;
+    font-size: 0.95em;
+  }
+
+.game-time-display--critical {
+  color: var(--text-failure);
+}
+
+.game-time-display--inert {
+  color: var(--text-inert);
+}
+
+
+
+
+
+/*------------------------------------*\
+  #SIDE PANEL
+\*------------------------------------*/
+
+.side-panel {
+  height: 33em;
+  grid-column: 2;
+  text-transform: uppercase;
+  padding: 0.3em 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.side-panel--light-theme {
+  background: white;
+  border: 1px solid var(--bg-box-darker);
+}
+
+  .side-panel__header {
+    display: inline-block;
+    margin-top:    1.2em;
+    margin-bottom: 0.7em;
+    color: var(--text-main-light);
+  }
+
+  .side-panel__header--dark-theme {
+    color: var(--text-main-light);
+  }
+
+  .side-panel__header--light-theme {
+    color: var(--text-main-dark);
+  }
+
+  .side-panel__subheader {
+    margin-top:    0;
+    margin-bottom: 0.5em;
+    font-size: 1.25em;
+    transition: opacity 1.3s, visibility 1.3s linear;
+    color: var(--text-light);
+  }
+
+  .side-panel__subheader--dark-theme {
+    color: var(--text-light);
+  }
+
+  .side-panel__subheader--light-theme {
+    color: var(--text-dark);
+  }
+
+  .side-panel__subheader--score {
+    color: var(--text-rich);
+  }
+
+  .side-panel__btn-modal {
+    margin-left: 0.7em;
+    vertical-align: super;
+    display: inline-block;
+    font-size: 8px;
+    height: 14px;
+    width:  14px;
+    padding: 0;
+  }
+
+  .side-panel__btn-modal--dark-theme {
+    background: var(--bg-main-dark);
+    color: var(--text-light);
+    border: 1px solid var(--text-light);
+  }
+
+  .side-panel__btn-modal--light-theme {
+    background: var(--bg-box-lighter);
+    color: var(--text-dark);
+    border: 1px solid var(--bg-main-dark);
+  }
+
+  /* This class selector originates in the the Remixicon library */
+  .ri-arrow-up-fill,
+  .ri-subtract-line {
+    margin-left: 0.2em;
+    font-size: 1em;
+  }
+
+  .ri-arrow-up-fill--dark-theme {
+    color: var(--text-main-light);
+  }
+
+  .ri-arrow-up-fill--light-theme {
+    color: var(--text-main-dark);
+  }
+
+  hr {
+    width: 80%;
+    border-color: var(--text-light);
+    margin: 0 auto;
+    opacity: 0.5;
+  }
+
+  /* Div wrapper around the .side-panel__list */
+  .side-panel__box {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 1.6s, visibility 1.6s linear;
+  }
+
+    .side-panel__list {
+      width: 82%;
+      margin: 0.5em auto 3.85em;
+      font-size: 0.65em;
+      line-height: 2.4em;
+    }
+
+    .side-panel__list--dark-theme {
+      color: var(--text-light);
+    }
+
+    .side-panel__list--light-theme {
+      color: var(--text-dark);
+    }
+
+    .side-panel__btn-controls {
+      font-size: 13.33px;
+      width:  89%;
+      height: 3.5em;
+      margin: 0.5em 0;
+      text-transform: uppercase;
+      border: 2px solid var(--text-light);
+      align-self: center;
+    }
+
+/*------------------------------------*\
+  #BUTTONS
+\*------------------------------------*/
+
+.btn {
+  text-transform: uppercase;
+}
+
+.btn--pause,
+.btn--pause[disabled]:hover {
+  background: var(--text-rich);
+}
+
+.btn--pause:hover {
+  background: var(--text-rich-darker);
+}
+
+.btn--go--dark-theme,
+.btn--go--dark-theme[disabled]:hover {
+  background: var(--text-main-light);
+}
+
+.btn--go--dark-theme:hover {
+  background: var(--text-main-dark);
+}
+
+.btn--go--light-theme,
+.btn--go--light-theme[disabled]:hover {
+  background: var(--text-main-dark);
+}
+
+.btn--go--light-theme:hover {
+  background: var(--text-main-darker);
+}
+
+.btn--light {
+  background: var(--bg-box-light);
+}
+
+.btn--light:hover {
+  background: var(--bg-box-darker);
+}
+
+.btn--dark {
+  background: #242424;
+  color: var(--text-light);
+}
+
+.btn--dark:hover {
+  background: var(--bg-main-dark);
+  color: var(--text-light);
+}
+
+
+
+
+/*------------------------------------*\
+  #UTILITY CLASSES
+\*------------------------------------*/
+
+.rich {
+  color: var(--text-rich);
+}
+
+.scary {
+  color: var(--text-scary);
+}
+
+.godlike {
+  color: var(--text-godlike);
+}
+
+.failure {
+  color: var(--text-failure)
+}
+
+.shiny-border {
+  border: 2px solid var(--bg-box-light);
+  box-shadow: 0 1px 6px var(--bg-box-light);
+}
+
+.span-grid-width {
+  grid-column: 1 / -1;
+}
+
+.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.out-link {
+  font-weight: bolder;
+}
+
+.grid-centered {
+  justify-self: center;
+}

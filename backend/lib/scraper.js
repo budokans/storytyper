@@ -84,6 +84,7 @@ async function waitToScrape(url) {
 export async function scrapeStories(url) {
   const storiesFragment = await getStoriesData(url);
 
+  // If it's not the last page and the scraper has yet to encounter the newest scrape present in the database, then scrape next page and concatenate scrapes with those all scraped. N.B.: pageLimit check only for dev purposes.
   if (
     storiesFragment.nextPage &&
     !storiesFragment.upToDate &&

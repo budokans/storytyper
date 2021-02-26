@@ -1,0 +1,44 @@
+[
+  {
+    "name": "Beginner",
+    "class": "",
+    "seconds": 86,
+    "speed": "0-34"
+  },
+  {
+    "name": "Novice",
+    "class": "",
+    "seconds": 55,
+    "speed": "35-54"
+  },
+  {
+    "name": "Proficient",
+    "class": "rich",
+    "seconds": 38,
+    "speed": "55-79"
+  },
+  {
+    "name": "Advanced",
+    "class": "rich",
+    "seconds": 32,
+    "speed": "80-94"
+  },
+  {
+    "name": "Scary Fast",
+    "class": "scary",
+    "seconds": 28,
+    "speed": "95-109"
+  },
+  {
+    "name": "Master",
+    "class": "scary",
+    "seconds": 24,
+    "speed": "110-124"
+  },
+  {
+    "name": "Godlike",
+    "class": "godlike",
+    "seconds": 20,
+    "speed": "125-150"
+  }
+]
