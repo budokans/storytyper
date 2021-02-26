@@ -40,10 +40,10 @@ export default function StoryBox({ currentStory, gameIsOver }) {
 
       {formattedIsShowing ? (
         <div className="gameplay-box--story__text">
-          {currentStory.story && parse(currentStory.formatted)}
+          {currentStory.storyText && parse(currentStory.storyHTML)}
         </div>
       ) : (
-        <p className="gameplay-box--story__text">{currentStory.story}</p>
+        <p className="gameplay-box--story__text">{currentStory.storyText}</p>
       )}
 
       {gameIsOver && (
@@ -64,11 +64,7 @@ export default function StoryBox({ currentStory, gameIsOver }) {
 
           <p className="gameplay-box--story__attribution  span-grid-width  grid-centered  ">
             Story originally published on{" "}
-            <a
-              className="out-link"
-              href="http://fiftywordstories.com/"
-              target="_blank"
-            >
+            <a className="out-link" href={currentStory.url} target="_blank">
               50-Word Stories.
             </a>
           </p>

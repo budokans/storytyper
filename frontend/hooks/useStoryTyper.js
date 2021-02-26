@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { useThemeContext } from "../context/themeContext";
-import storiesData from "../storiesData.json";
 import difficulties from "../difficulties.json";
 
 export default function useStoryTyper() {
@@ -26,22 +25,13 @@ export default function useStoryTyper() {
   const playerShouldLevelUp =
     timeLeftOver && level !== difficulties.length - 1 ? true : false;
 
-  // Gets stories and sets them to unreadStories
-  // Use this for the final build
-  // useEffect(() => {
-  //   fetch(
-  //     "https://raw.githubusercontent.com/budokans/speedtyper/development/storiesData.json?token=AQOMVEOP2OCQ6IPYD7XGUUC7WZPYS"
-  //   )
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       setUnreadStories(data);
-  //     });
-  // }, []);
-
-  // Gets stories and sets them to unreadStories
-  // This is for development while repo is private
+  // Gets the stories array from db and saves it to state on initial render
   useEffect(() => {
-    setUnreadStories(storiesData);
+    fetch("http://localhost:2094/data")
+      .then((res) => res.json())
+      .then((data) => {
+        setUnreadStories(data);
+      });
   }, []);
 
   // Randomly selects story to be displayed in the StoryBox on game start/restart.
@@ -60,9 +50,9 @@ export default function useStoryTyper() {
 
   useEffect(() => {
     document.onkeypress = () => {
-      !isRunning && startGame();
+      !isRunning && !gameIsOver && startGame();
     };
-  }, [mounted]);
+  }, [mounted, gameIsOver]);
 
   // Starts the countdown and keeps the textarea disabled until it reaches 0
   useEffect(() => {
@@ -100,7 +90,7 @@ export default function useStoryTyper() {
   // Stops game when the input matches the story
   useEffect(() => {
     if (currentStory) {
-      if (text === currentStory.story) {
+      if (text === currentStory.storyText) {
         textareaRef.current.disabled = true;
         setIsRunning(false);
         setTimeLeftOver(gameTimeRemaining);
@@ -116,7 +106,7 @@ export default function useStoryTyper() {
   // Checks for and alerts for errors as user types
   useEffect(() => {
     if (isRunning) {
-      const typedSoFar = currentStory.story.slice(0, text.length);
+      const typedSoFar = currentStory.storyText.slice(0, text.length);
       if (typedSoFar !== text) {
         setErrorPresent(true);
         setInefficientKeyStrokesCount(inefficientKeyStrokesCount + 1);
@@ -129,8 +119,8 @@ export default function useStoryTyper() {
 
   // Separates any trailing erroneous characters from the correctly typed input
   function removeBadCharacters() {
-    for (let i = 0; i < currentStory.story.length; i++) {
-      if (currentStory.story.charAt(i) !== text.charAt(i)) {
+    for (let i = 0; i < currentStory.storyText.length; i++) {
+      if (currentStory.storyText.charAt(i) !== text.charAt(i)) {
         return text.slice(0, i);
       }
     }
@@ -139,7 +129,7 @@ export default function useStoryTyper() {
   // Removes any incompletely typed words from the end of the input text.
   function getOnlyCompleteWords(text) {
     const finalChar = text.charAt(text.length - 1);
-    const nextChar = currentStory.story.charAt(text.length);
+    const nextChar = currentStory.storyText.charAt(text.length);
     const lastWhiteSpace = text.lastIndexOf(" ");
     const atLeastOneSpace = text.search(/\s/);
     const onlyCompletedWords = text.slice(0, lastWhiteSpace);
@@ -165,7 +155,7 @@ export default function useStoryTyper() {
 
   // Calculates the final word count in various way depending on the state of the user input
   const calculateWordCount = () => {
-    if (text === currentStory.story) {
+    if (text === currentStory.storyText) {
       return trimAndCount(text);
     } else if (errorPresent) {
       const errorFreeText = removeBadCharacters();
