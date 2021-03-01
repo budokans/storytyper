@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import classNames from "classnames";
 import Head from "next/head";
 import StoryBox from "../components/StoryBox";
 import CountdownDisplay from "../components/CountdownDisplay";
@@ -47,6 +48,15 @@ export default function Home() {
     document.body.style.backgroundColor =
       theme === "light" ? "#faf0e6" : "black";
   }, [theme]);
+
+  const gameOverModalClass = classNames({
+    "modal__body--bg-transparent": true,
+    "modal__body--alert": true,
+    ["shiny-border--success"]: gameTimeRemaining,
+    ["shiny-border--fail"]: !gameTimeRemaining,
+  });
+
+  ("modal__body--bg-transparent  modal__body--alert  shiny-border");
 
   return (
     <>
@@ -120,7 +130,7 @@ export default function Home() {
           onToggleModal={handleToggleModal}
           modalIsShowing={gameIsOver && !gameOverModalClosed ? true : false}
           modalBodyIsTransparent={true}
-          modalBodyClass="modal__body--bg-transparent  modal__body--alert  shiny-border"
+          modalBodyClass={gameOverModalClass}
         >
           <header
             className={`modal__header--xl  span-grid-width  ${
