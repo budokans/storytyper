@@ -40,6 +40,26 @@ export default function useStoryTyper() {
     setCurrentStory(unreadStories[currentStoryIdx]);
   }, [unreadStories]);
 
+  // Renders a new story that the user hasn't yet seen/typed
+  function nextStory() {
+    // Adding current story to completedStories
+    const updatedCompletedStories = completedStories;
+    updatedCompletedStories.splice(completedStories.length, 0, currentStory);
+    setCompletedStories(updatedCompletedStories);
+
+    // Removing current story from unreadStories
+    const updatedUnreadStories = unreadStories.filter(
+      (story) => story !== currentStory
+    );
+    setUnreadStories(updatedUnreadStories);
+
+    // If unreadStories is empty, unreadStories and completedStories will be reset to their initial states and the player can play through them all again.
+    if (unreadStories.length === 1) {
+      setUnreadStories(completedStories);
+      setCompletedStories([]);
+    }
+  }
+
   // Starts the game - also checks to see if the game hasn't already been played and is yet to be reset before doing so.
   function startGame() {
     !isRunning && !gameIsOver && setIsRunning(true);
@@ -229,26 +249,6 @@ export default function useStoryTyper() {
   function handleNextStoryClick() {
     handlePlayAgainClick();
     nextStory();
-  }
-
-  // Renders a new story that the user hasn't yet seen/typed
-  function nextStory() {
-    // Adding current story to completedStories
-    const updatedCompletedStories = completedStories;
-    updatedCompletedStories.splice(completedStories.length, 0, currentStory);
-    setCompletedStories(updatedCompletedStories);
-
-    // Removing current story from unreadStories
-    const updatedUnreadStories = unreadStories.filter(
-      (story) => story !== currentStory
-    );
-    setUnreadStories(updatedUnreadStories);
-
-    // If unreadStories is empty, unreadStories and completedStories will be reset to their initial states and the player can play through them all again.
-    if (unreadStories.length === 1) {
-      setUnreadStories(completedStories);
-      setCompletedStories([]);
-    }
   }
 
   // Handles clicking of the close button inside the Modal
