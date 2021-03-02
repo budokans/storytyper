@@ -56,8 +56,6 @@ export default function Home() {
     ["shiny-border--fail"]: !gameTimeRemaining,
   });
 
-  ("modal__body--bg-transparent  modal__body--alert  shiny-border");
-
   return (
     <>
       <Head>

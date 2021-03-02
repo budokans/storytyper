@@ -1,8 +1,9 @@
-import { createContext, useState, useContext } from "react";
+import { createContext, useContext } from "react";
+import useStickyState from "../hooks/useStickyState";
 const ThemeContext = createContext();
 
 export function ThemeContextProvider({ children }) {
-  const [theme, setTheme] = useState("dark");
+  const [theme, setTheme] = useStickyState("dark", "userPreferredTheme");
 
   function toggleTheme() {
     setTheme((prevTheme) => (prevTheme === "dark" ? "light" : "dark"));
