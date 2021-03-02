@@ -66,13 +66,11 @@ export default function useStoryTyper() {
   }
 
   // Pass 'start on keypress' handler to onkeypress method when document has loaded
-  const mounted = typeof window !== undefined;
-
   useEffect(() => {
     document.onkeypress = () => {
       !isRunning && !gameIsOver && startGame();
     };
-  }, [mounted, gameIsOver]);
+  }, [isRunning, gameIsOver]);
 
   // Starts the countdown and keeps the textarea disabled until it reaches 0
   useEffect(() => {
