@@ -6,7 +6,7 @@ import formatStoryText from "./formatStoryText";
 import client from "./dbMongo";
 
 let pageCount = 0;
-let pageLimit = 3;
+let pageLimit = 6;
 
 // Get the HTML of the page to be scraped
 async function getHTML(url) {
@@ -93,7 +93,7 @@ export async function scrapeStories(url) {
       stories: nextPageStories,
       scrapeCount: nextPageScrapeCount,
       pageCount,
-    } = await waitToScrape(storiesFragment.nextPage);
+    } = await scrapeStories(storiesFragment.nextPage);
 
     return {
       stories: storiesFragment.stories.concat(nextPageStories),
@@ -120,67 +120,58 @@ export async function runCron() {
     `Scraping completed at ${utc}: ${scrapeCount} stories successfully scraped over ${pageCount} pages`
   );
 
-  // const storiesToEdit = stories.filter((story, idx, storiesArr) => {
-  //   storiesArr.splice(idx, 1);
-  //   return !story.author;
-  // });
+  const readyStories = stories.filter((story) => story.author.length >= 1);
+  const unreadyStories = stories.filter((story) => story.author.length === 0);
 
-  // Connect to mongoDb db
-  // if (stories.length > 0) {
-  //   try {
-  //     await client.connect();
-  //     const database = client.db("storytyper");
-  //     await database.dropCollection("stories");
-  //     const storiesCollection = database.collection("stories");
-  //     const storiesToEditCollection = database.collection("storiesToEdit");
+  // Add stories to database
+  if (stories.length > 0) {
+    try {
+      await client.connect();
+      const database = client.db("storytyper");
+      await database.dropCollection("storiesToEdit");
 
-  //     // stories.reverse().forEach((story) => {
-  //     //   story.dateScraped = utc;
-  //     //   console.log("looping!");
+      const storiesCollection = database.collection("stories");
+      const storiesToEditCollection = database.collection("storiesToEdit");
 
-  //     //   story.author
-  //     //     ? storiesCollection.insertOne(story)
-  //     //     : storiesToEditCollection.insertOne(story);
-  //     // });
+      const completeStoriesResult =
+        readyStories.length > 1
+          ? await storiesCollection.insertMany(readyStories, {
+              ordered: true,
+            })
+          : readyStories.length === 1
+          ? await storiesCollection.insertOne(readyStories[0])
+          : undefined;
 
-  //     const completeStoriesResult =
-  //       stories.length > 0 &&
-  //       (await storiesCollection.insertMany(
-  //         stories.filter((story) => story.author.length >= 1),
-  //         {
-  //           ordered: true,
-  //         }
-  //       ));
+      const storiesToEditResult =
+        unreadyStories.length > 1
+          ? await storiesToEditCollection.insertMany(unreadyStories, {
+              ordered: true,
+            })
+          : unreadyStories.length === 1
+          ? await storiesToEditCollection.insertOne(unreadyStories[0])
+          : undefined;
 
-  //     const storiesToEditResult =
-  //       stories.length > 0 &&
-  //       (await storiesToEditCollection.insertMany(
-  //         stories.filter((story) => story.author.length === 0),
-  //         {
-  //           ordered: true,
-  //         }
-  //       ));
+      const count =
+        (completeStoriesResult ? completeStoriesResult.insertedCount : 0) +
+        (storiesToEditResult ? storiesToEditResult.insertedCount : 0);
 
-  //     const count =
-  //       completeStoriesResult.insertedCount + storiesToEditResult.insertedCount;
-
-  //     console.log(`${count} out of ${stories.length} documents were inserted`);
-  //   } finally {
-  //     console.log("closing");
-  //     client.close();
-  //   }
-  // }
-
-  // Add stories to database such that the most recent story published is positioned at index 0
-  stories.reverse().forEach((story) => {
-    story.dateScraped = utc;
-
-    // Check if the story has an author. If not, push to storiesToEdit array
-    story.author
-      ? db.get("stories").unshift(story).write()
-      : db.get("storiesToEdit").unshift(story).write();
-  });
+      console.log(`${count} out of ${stories.length} documents were inserted`);
+    } finally {
+      console.log("Closing database connection.");
+      client.close();
+    }
+  }
 
   // Reset page count
   pageCount = 0;
+
+  // Add stories to the lowdb database such that the most recent story published is positioned at index 0
+  // stories.reverse().forEach((story) => {
+  //   story.dateScraped = utc;
+
+  //   // Check if the story has an author. If not, push to storiesToEdit array
+  //   story.author
+  //     ? db.get("stories").unshift(story).write()
+  //     : db.get("storiesToEdit").unshift(story).write();
+  // });
 }
