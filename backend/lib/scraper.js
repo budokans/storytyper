@@ -24,6 +24,9 @@ async function scrapePage(url) {
   const latestDbStoryId = db.get("stories[0].id").value();
   pageCount++;
 
+  const date = new Date();
+  const utc = date.toUTCString();
+
   console.log(`Scraping ${url}...`);
 
   $("article").each((i, el) => {
@@ -39,6 +42,7 @@ async function scrapePage(url) {
       const title = extractTitleText(headerText).trim();
       const url = $(el).find(".entry-title a").attr("href");
       const bio = $(el).find("hr").next().html().trim();
+      const dateScraped = utc;
 
       // Get story with HTML intact for 'show formatting' view on front end.
       let storyHTML = "";
@@ -53,7 +57,16 @@ async function scrapePage(url) {
       const storyText = formatStoryText(storyHTML);
 
       // Create story object and push to array
-      const story = { id, author, title, url, storyHTML, storyText, bio };
+      const story = {
+        id,
+        author,
+        title,
+        url,
+        storyHTML,
+        storyText,
+        bio,
+        dateScraped,
+      };
       storiesArray.push(story);
       scrapeCount++;
     }
@@ -128,6 +141,7 @@ export async function runCron() {
     try {
       await client.connect();
       const database = client.db("storytyper");
+      await database.dropCollection("stories");
       await database.dropCollection("storiesToEdit");
 
       const storiesCollection = database.collection("stories");
