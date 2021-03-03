@@ -6,7 +6,7 @@ import formatStoryText from "./formatStoryText";
 import client from "./dbMongo";
 
 let pageCount = 0;
-let pageLimit = 6;
+let pageLimit = 4;
 
 // Get the HTML of the page to be scraped
 async function getHTML(url) {
@@ -118,7 +118,50 @@ export async function scrapeStories(url) {
   }
 }
 
-// Run scrapeStories on a schedule
+// Insert stories to Db
+async function insertToDb(stories) {
+  try {
+    await client.connect();
+    const database = client.db("storytyper");
+    // await database.dropCollection("stories");
+    // await database.dropCollection("storiesToEdit");
+
+    const storiesCollection = database.collection("stories");
+    const storiesToEditCollection = database.collection("storiesToEdit");
+
+    const readyStories = stories.filter((story) => story.author.length >= 1);
+    const unreadyStories = stories.filter((story) => story.author.length === 0);
+
+    const completeStoriesResult =
+      readyStories.length > 1
+        ? await storiesCollection.insertMany(readyStories, {
+            ordered: true,
+          })
+        : readyStories.length === 1
+        ? await storiesCollection.insertOne(readyStories[0])
+        : undefined;
+
+    const storiesToEditResult =
+      unreadyStories.length > 1
+        ? await storiesToEditCollection.insertMany(unreadyStories, {
+            ordered: true,
+          })
+        : unreadyStories.length === 1
+        ? await storiesToEditCollection.insertOne(unreadyStories[0])
+        : undefined;
+
+    const count =
+      (completeStoriesResult ? completeStoriesResult.insertedCount : 0) +
+      (storiesToEditResult ? storiesToEditResult.insertedCount : 0);
+
+    console.log(`${count} out of ${stories.length} documents were inserted`);
+  } finally {
+    client.close();
+    console.log("Closed database connection.");
+  }
+}
+
+// Run scrapeStories on a schedule and add scrapes to db
 export async function runCron() {
   console.log("Scraping!");
 
@@ -133,47 +176,9 @@ export async function runCron() {
     `Scraping completed at ${utc}: ${scrapeCount} stories successfully scraped over ${pageCount} pages`
   );
 
-  const readyStories = stories.filter((story) => story.author.length >= 1);
-  const unreadyStories = stories.filter((story) => story.author.length === 0);
-
-  // Add stories to database
+  // Add any scraped stories to the database
   if (stories.length > 0) {
-    try {
-      await client.connect();
-      const database = client.db("storytyper");
-      await database.dropCollection("stories");
-      await database.dropCollection("storiesToEdit");
-
-      const storiesCollection = database.collection("stories");
-      const storiesToEditCollection = database.collection("storiesToEdit");
-
-      const completeStoriesResult =
-        readyStories.length > 1
-          ? await storiesCollection.insertMany(readyStories, {
-              ordered: true,
-            })
-          : readyStories.length === 1
-          ? await storiesCollection.insertOne(readyStories[0])
-          : undefined;
-
-      const storiesToEditResult =
-        unreadyStories.length > 1
-          ? await storiesToEditCollection.insertMany(unreadyStories, {
-              ordered: true,
-            })
-          : unreadyStories.length === 1
-          ? await storiesToEditCollection.insertOne(unreadyStories[0])
-          : undefined;
-
-      const count =
-        (completeStoriesResult ? completeStoriesResult.insertedCount : 0) +
-        (storiesToEditResult ? storiesToEditResult.insertedCount : 0);
-
-      console.log(`${count} out of ${stories.length} documents were inserted`);
-    } finally {
-      console.log("Closing database connection.");
-      client.close();
-    }
+    insertToDb(stories).catch(console.dir);
   }
 
   // Reset page count
