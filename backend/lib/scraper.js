@@ -6,7 +6,7 @@ import formatStoryText from "./formatStoryText";
 import client from "./dbMongo";
 
 let pageCount = 0;
-let pageLimit = 2;
+let pageLimit = 3;
 
 // Get the HTML of the page to be scraped
 async function getHTML(url) {
@@ -15,7 +15,7 @@ async function getHTML(url) {
 }
 
 // Capture the data from each story post in an object and push to an array
-async function getStoriesData(url) {
+async function scrapePage(url) {
   const html = await getHTML(url);
   const $ = cheerio.load(html);
   let storiesArray = [];
@@ -72,18 +72,16 @@ async function getStoriesData(url) {
 // Scrape the next page after a randomized interval
 async function waitToScrape(url) {
   const randNumBetween3And7 = (Math.random() * 4 + 3) * 1000;
-
   console.log(`Scraping next page in ${randNumBetween3And7} milliseconds...`);
 
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
   await sleep(randNumBetween3And7);
-  return await getStoriesData(url);
+  return await scrapeStories(url);
 }
 
 // Scrape url for new stories
 export async function scrapeStories(url) {
-  const storiesFragment = await getStoriesData(url);
+  const storiesFragment = await scrapePage(url);
 
   // If it's not the last page and the scraper has yet to encounter the newest scrape present in the database, then scrape next page and concatenate scrapes with those all scraped. N.B.: pageLimit check only for dev purposes.
   if (
@@ -112,7 +110,7 @@ export async function runCron() {
   console.log("Scraping!");
 
   const storiesData = await scrapeStories(
-    "http://fiftywordstories.com/category/stories"
+    "http://fiftywordstories.com/category/stories/"
   );
   const { stories, scrapeCount } = storiesData;
   const date = new Date();
@@ -122,40 +120,65 @@ export async function runCron() {
     `Scraping completed at ${utc}: ${scrapeCount} stories successfully scraped over ${pageCount} pages`
   );
 
+  // const storiesToEdit = stories.filter((story, idx, storiesArr) => {
+  //   storiesArr.splice(idx, 1);
+  //   return !story.author;
+  // });
+
   // Connect to mongoDb db
-  if (stories.length > 0) {
-    try {
-      await client.connect();
-      const database = client.db("storytyper");
-      const storiesCollection = database.collection("stories");
-      const storiesToEditCollection = database.collection("storiesToEdit");
+  // if (stories.length > 0) {
+  //   try {
+  //     await client.connect();
+  //     const database = client.db("storytyper");
+  //     await database.dropCollection("stories");
+  //     const storiesCollection = database.collection("stories");
+  //     const storiesToEditCollection = database.collection("storiesToEdit");
 
-      // stories.reverse().forEach((story) => {
-      //   story.dateScraped = utc;
-      //   console.log("looping!");
+  //     // stories.reverse().forEach((story) => {
+  //     //   story.dateScraped = utc;
+  //     //   console.log("looping!");
 
-      //   story.author
-      //     ? storiesCollection.insertOne(story)
-      //     : storiesToEditCollection.insertOne(story);
-      // });
-      const result = await storiesCollection.insertMany(stories, {
-        ordered: true,
-      });
-      console.log(`${result.insertedCount} documents were inserted`);
-    } finally {
-      console.log("closing");
-      client.close();
-    }
-  }
+  //     //   story.author
+  //     //     ? storiesCollection.insertOne(story)
+  //     //     : storiesToEditCollection.insertOne(story);
+  //     // });
 
-  // // Add stories to database such that the most recent story published is positioned at index 0
-  // stories.reverse().forEach((story) => {
-  //   story.dateScraped = utc;
+  //     const completeStoriesResult =
+  //       stories.length > 0 &&
+  //       (await storiesCollection.insertMany(
+  //         stories.filter((story) => story.author.length >= 1),
+  //         {
+  //           ordered: true,
+  //         }
+  //       ));
 
-  //   // Check if the story has an author. If not, push to storiesToEdit array
-  //   story.author
-  //     ? db.get("stories").unshift(story).write()
-  //     : db.get("storiesToEdit").unshift(story).write();
+  //     const storiesToEditResult =
+  //       stories.length > 0 &&
+  //       (await storiesToEditCollection.insertMany(
+  //         stories.filter((story) => story.author.length === 0),
+  //         {
+  //           ordered: true,
+  //         }
+  //       ));
+
+  //     const count =
+  //       completeStoriesResult.insertedCount + storiesToEditResult.insertedCount;
+
+  //     console.log(`${count} out of ${stories.length} documents were inserted`);
+  //   } finally {
+  //     console.log("closing");
+  //     client.close();
+  //   }
+  // }
+
+  // Add stories to database such that the most recent story published is positioned at index 0
+  stories.reverse().forEach((story) => {
+    story.dateScraped = utc;
+
+    // Check if the story has an author. If not, push to storiesToEdit array
+    story.author
+      ? db.get("stories").unshift(story).write()
+      : db.get("storiesToEdit").unshift(story).write();
   });
 
   // Reset page count
