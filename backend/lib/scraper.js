@@ -3,6 +3,7 @@ import cheerio from "cheerio";
 import db from "./db";
 import { extractAuthorText, extractTitleText } from "./massageHeaderText";
 import formatStoryText from "./formatStoryText";
+import client from "./dbMongo";
 
 let pageCount = 0;
 let pageLimit = 2;
@@ -121,14 +122,40 @@ export async function runCron() {
     `Scraping completed at ${utc}: ${scrapeCount} stories successfully scraped over ${pageCount} pages`
   );
 
-  // Add stories to database such that the most recent story published is positioned at index 0
-  stories.reverse().forEach((story) => {
-    story.dateScraped = utc;
+  // Connect to mongoDb db
+  if (stories.length > 0) {
+    try {
+      await client.connect();
+      const database = client.db("storytyper");
+      const storiesCollection = database.collection("stories");
+      const storiesToEditCollection = database.collection("storiesToEdit");
 
-    // Check if the story has an author. If not, push to storiesToEdit array
-    story.author
-      ? db.get("stories").unshift(story).write()
-      : db.get("storiesToEdit").unshift(story).write();
+      // stories.reverse().forEach((story) => {
+      //   story.dateScraped = utc;
+      //   console.log("looping!");
+
+      //   story.author
+      //     ? storiesCollection.insertOne(story)
+      //     : storiesToEditCollection.insertOne(story);
+      // });
+      const result = await storiesCollection.insertMany(stories, {
+        ordered: true,
+      });
+      console.log(`${result.insertedCount} documents were inserted`);
+    } finally {
+      console.log("closing");
+      client.close();
+    }
+  }
+
+  // // Add stories to database such that the most recent story published is positioned at index 0
+  // stories.reverse().forEach((story) => {
+  //   story.dateScraped = utc;
+
+  //   // Check if the story has an author. If not, push to storiesToEdit array
+  //   story.author
+  //     ? db.get("stories").unshift(story).write()
+  //     : db.get("storiesToEdit").unshift(story).write();
   });
 
   // Reset page count
