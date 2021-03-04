@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import { useThemeContext } from "../context/themeContext";
 import difficulties from "../difficulties.json";
 
 export default function useStoryTyper() {
@@ -209,17 +208,14 @@ export default function useStoryTyper() {
     cpm > 0 &&
     Math.round(100 * (charCount / (charCount + inefficientKeyStrokesCount)));
 
-  const { theme } = useThemeContext();
-
-  // Functionality that all of the PlayButtons need for their various reset types.
-  // Because a border is applied to the TypingBox textarea in light theme mode, the starting height of the textarea must be greater to avoid the scrollbar. See TypingBox.
+  // Functionality that all of the PlayButtons need for their various reset types. Note: resets height of textarea to the maximum without scrollbar.
   function basicReset() {
     setText("");
     setCountdown(2);
     setErrorPresent(false);
     setInefficientKeyStrokesCount(0);
     setGameOverModalClosed(false);
-    textareaRef.current.style.height = theme === "dark" ? "5.5em" : "5.63em";
+    textareaRef.current.style.height = "5.63em";
   }
 
   // Resets the game if the player decides to click Reset in the middle of a game.

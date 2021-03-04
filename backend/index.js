@@ -38,7 +38,7 @@ app.get("/data", async (req, res) => {
   console.log("Getting stories from database...");
 
   const db = getDb("storytyper");
-  const cursor = await db.collection("stories").find({});
+  const cursor = await db.collection("stories").find();
   const stories = await cursor.toArray();
 
   res.json(stories);

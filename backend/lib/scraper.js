@@ -6,7 +6,7 @@ import formatStoryText from "./formatStoryText";
 import { getDb } from "./db";
 
 let pageCount = 0;
-let pageLimit = 4;
+let pageLimit = 25;
 
 // Get the HTML of the page to be scraped
 async function getHTML(url) {
@@ -126,9 +126,8 @@ async function insertToDb(db, stories) {
   const storiesToEditCollection = db.collection("storiesToEdit");
 
   // Reverse the stories array so that the newest story scraped from the site will be insert with the _id of the highest value, needed for getNewestStoryId
-  stories = stories.reverse();
+  // stories = stories.reverse();
 
-  // Sort into stories that are ready to be used and stories that need manual editing before use.
   const readyStories = stories.filter((story) => story.author.length >= 1);
   const unreadyStories = stories.filter((story) => story.author.length === 0);
 
@@ -188,8 +187,8 @@ export async function runCron() {
   const db = getDb("storytyper");
 
   // Remove collections for a restart/testing
-  // await db.dropCollection("stories");
-  // await db.dropCollection("storiesToEdit");
+  await db.dropCollection("stories");
+  await db.dropCollection("storiesToEdit");
 
   // Get most recent story in db's ID
   const newestStoryId = await getNewestStoryId(db).catch(console.dir);
@@ -217,7 +216,6 @@ export async function runCron() {
     insertToDb(db, stories).catch(console.dir);
   }
 
-  // Reset page count
   pageCount = 0;
 
   // Add stories to the lowdb database such that the most recent story published is positioned at index 0

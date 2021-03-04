@@ -5,12 +5,9 @@ const uri =
 
 let client = null;
 
-// Create a connection to uri and call callback()
 function connect(callback) {
   if (client === null) {
-    // Create a mongoDB client
     client = new MongoClient(uri, { useUnifiedTopology: true });
-    // Establish a new connection
     client.connect((err) => {
       if (err) {
         client = null;
@@ -20,7 +17,6 @@ function connect(callback) {
       }
     });
   } else {
-    // Connection already established
     callback();
   }
 }

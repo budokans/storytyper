@@ -33,21 +33,18 @@ export default function TypingBox(props) {
     }
   }
 
-  // Enlarges the textarea as the user types
-  // Because a border is applied with the light theme, the height needs to stay at least 2px ahead of the scrollHeight.
+  // Maintains the height 2px above the scrollHeight to prevent a scrollbar showing.
   function resizeTextarea() {
-    textareaRef.current.style.height = "0px";
-    textareaRef.current.style.height =
-      theme === "dark"
-        ? `${textareaRef.current.scrollHeight + 1}px`
-        : `${textareaRef.current.scrollHeight + 2}px`;
+    textareaRef.current.style.height = `${
+      textareaRef.current.scrollHeight + 2
+    }px`;
   }
 
   const typingBoxClass = classNames({
     "gameplay-box": true,
     "gameplay-box--input": true,
     "gameplay-box--error": errorPresent,
-    "gameplay-box--input--light-theme": theme === "light",
+    [`gameplay-box--input--${theme}-theme`]: true,
   });
 
   // Prevents scrollbar from appearing if theme is changed after game is over.

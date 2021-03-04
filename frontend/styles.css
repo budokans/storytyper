@@ -213,6 +213,7 @@ body {
 
 .gameplay-box--story--dark-theme {
   background: var(--bg-box-light);
+  border: 1px solid var(--bg-box-lighter);
 }
 
 .gameplay-box--story--light-theme {
@@ -221,7 +222,7 @@ body {
 }
 
 .gameplay-box--expanded { 
-  max-height: 60em;
+  max-height: 90em;
 }
 
   .gameplay-box--story__message {
@@ -275,7 +276,7 @@ a scrollbar */
 .gameplay-box--input {
   background: var(--text-inert-lighter);
   color: var(--text-dark);
-  height: 5.5em;
+  height: 5.63em;
   resize: none;
   outline: none;
   border: none;
@@ -283,9 +284,12 @@ a scrollbar */
   cursor: pointer;
 }
 
+.gameplay-box--input--dark-theme {
+  border: 1px solid var(--bg-box-lighter);
+}
+
 .gameplay-box--input--light-theme {
   border: 1px solid var(--bg-box-darker);
-  height: 5.63em;
 }
 
   .gameplay-box--input:focus {
@@ -715,7 +719,7 @@ a scrollbar */
 }
 
 .shiny-border {
-  border: 2px solid var(--bg-box-light);
+  border: 1px solid var(--bg-box-light);
   box-shadow: 0 1px 6px var(--bg-box-light);
 }
 
