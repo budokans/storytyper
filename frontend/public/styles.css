@@ -369,6 +369,8 @@ a scrollbar */
     background: none;
   }
 
+ 
+
     .modal__header {
       grid-column: 1;
       font-size:   0.9em;
@@ -748,7 +750,8 @@ a scrollbar */
   visibility: hidden;
 }
 
-.out-link {
+.out-link,
+.modal__body--story a {
   font-weight: bolder;
 }
 

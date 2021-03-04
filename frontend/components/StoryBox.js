@@ -51,7 +51,7 @@ export default function StoryBox({ currentStory, gameIsOver }) {
           <p className="gameplay-box--story__text">{currentStory.storyText}</p>
         ) : (
           <div className="gameplay-box--story__text">
-            {currentStory.storyText && parse(currentStory.storyHTML)}
+            {parse(currentStory.storyHTML)}
           </div>
         )
       }
@@ -85,7 +85,7 @@ export default function StoryBox({ currentStory, gameIsOver }) {
         <Modal
           modalIsShowing={modalIsShowing}
           onToggleModal={handleToggleModal}
-          modalBodyClass=""
+          modalBodyClass="modal__body--story"
         >
           <header className="modal__header">
             <h2>{currentStory.author}</h2>
