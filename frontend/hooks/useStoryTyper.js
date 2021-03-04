@@ -215,7 +215,7 @@ export default function useStoryTyper() {
     setErrorPresent(false);
     setInefficientKeyStrokesCount(0);
     setGameOverModalClosed(false);
-    textareaRef.current.style.height = "5.63em";
+    textareaRef.current.style.height = "5.64em";
   }
 
   // Resets the game if the player decides to click Reset in the middle of a game.

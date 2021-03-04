@@ -37,23 +37,22 @@ export default function StoryBox({ currentStory, gameIsOver }) {
 
   return (
     <div className={wrapperClass}>
-      {
-        // Show header with title and author when game ends
-        gameIsOver && (
-          <header className="gameplay-box--story__header">
-            <strong>{currentStory.title}</strong> by {currentStory.author}
-          </header>
-        )
-      }
+      {currentStory && gameIsOver && (
+        <header className="gameplay-box--story__header">
+          <strong>{currentStory.title}</strong> by {currentStory.author}
+        </header>
+      )}
 
       {
         // Show text with original formatting if the Original Formatting button has been clicked, otherwise show the condensed version for gameplay.
-        formattedIsShowing ? (
+        !currentStory ? (
+          <h2 className="gameplay-box--story__message">Loading Stories...</h2>
+        ) : !formattedIsShowing ? (
+          <p className="gameplay-box--story__text">{currentStory.storyText}</p>
+        ) : (
           <div className="gameplay-box--story__text">
             {currentStory.storyText && parse(currentStory.storyHTML)}
           </div>
-        ) : (
-          <p className="gameplay-box--story__text">{currentStory.storyText}</p>
         )
       }
 
@@ -82,18 +81,20 @@ export default function StoryBox({ currentStory, gameIsOver }) {
         </>
       )}
 
-      <Modal
-        modalIsShowing={modalIsShowing}
-        onToggleModal={handleToggleModal}
-        modalBodyClass=""
-      >
-        <header className="modal__header">
-          <h2>{currentStory.author}</h2>
-        </header>
-        <p className="span-grid-width">
-          {currentStory.bio && parse(currentStory.bio)}
-        </p>
-      </Modal>
+      {currentStory && (
+        <Modal
+          modalIsShowing={modalIsShowing}
+          onToggleModal={handleToggleModal}
+          modalBodyClass=""
+        >
+          <header className="modal__header">
+            <h2>{currentStory.author}</h2>
+          </header>
+          <p className="span-grid-width">
+            {currentStory.bio && parse(currentStory.bio)}
+          </p>
+        </Modal>
+      )}
     </div>
   );
 }

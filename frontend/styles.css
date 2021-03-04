@@ -205,6 +205,7 @@ body {
 
 .gameplay-box--story {
   color: var(--text-dark);
+  min-height: 19em;
   max-height: 19em;
   overflow: hidden;
   display: grid;
@@ -276,7 +277,7 @@ a scrollbar */
 .gameplay-box--input {
   background: var(--text-inert-lighter);
   color: var(--text-dark);
-  height: 5.63em;
+  height: 5.64em;
   resize: none;
   outline: none;
   border: none;

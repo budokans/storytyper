@@ -81,11 +81,7 @@ export default function Home() {
 
       <div className="game-container">
         <section className="gameplay-container">
-          {currentStory ? (
-            <StoryBox currentStory={currentStory} gameIsOver={gameIsOver} />
-          ) : (
-            <h2 className="gameplay-box--story__message">Loading Stories...</h2>
-          )}
+          <StoryBox currentStory={currentStory} gameIsOver={gameIsOver} />
 
           <TypingBox
             countdown={countdown}
