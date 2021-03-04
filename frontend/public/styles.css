@@ -1,4 +1,4 @@
-@import "./node_modules/normalize.css/normalize.css";
+@import "../node_modules/normalize.css/normalize.css";
 
 /**
  * CONTENTS
@@ -82,7 +82,7 @@ dd {
 --bg-box-even-darker: #e9bc90;
 --bg-box-failure: #ff8080;
 
---text-main-light: lime;
+--text-main-light: #00ff00;
 --text-main-dark: #00db00;
 --text-main-darker: #00BC00;
 --text-dark: black;

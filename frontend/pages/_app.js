@@ -1,6 +1,6 @@
 import { ThemeContextProvider } from "../context/themeContext";
 import ClientOnly from "../components/ClientOnly";
-import "../styles.css";
+import "../public/styles.css";
 
 export default function App({ Component, pageProps }) {
   return (
