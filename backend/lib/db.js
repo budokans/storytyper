@@ -36,16 +36,4 @@ function close() {
   }
 }
 
-// const mongoUtil = {
-//   initDb: (callback) => {
-//     MongoClient.connect(uri, { useUnifiedTopology: true }, (err, client) => {
-//       _db = client.db("storytyper");
-//       return callback(err);
-//     });
-//   },
-//   getDb: () => {
-//     return _db;
-//   },
-// };
-
 export { connect, getDb, close };

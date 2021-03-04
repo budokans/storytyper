@@ -3,7 +3,7 @@ import cheerio from "cheerio";
 // import db from "./db";
 import { extractAuthorText, extractTitleText } from "./massageHeaderText";
 import formatStoryText from "./formatStoryText";
-import { connect, getDb } from "./db";
+import { getDb } from "./db";
 
 let pageCount = 0;
 let pageLimit = 4;
@@ -185,44 +185,40 @@ async function getNewestStoryId(db) {
 
 // Run scrapeStories on a schedule and add scrapes to db
 export async function runCron() {
-  // Open connection to db
-  connect(async (err) => {
-    if (err) console.log(err);
-    const db = getDb("storytyper");
+  const db = getDb("storytyper");
 
-    // Remove collections for a restart/testing
-    // await db.dropCollection("stories");
-    // await db.dropCollection("storiesToEdit");
+  // Remove collections for a restart/testing
+  // await db.dropCollection("stories");
+  // await db.dropCollection("storiesToEdit");
 
-    // Get most recent story in db's ID
-    const newestStoryId = await getNewestStoryId(db).catch(console.dir);
-    console.log(
-      `The id of the newest story in the database is ${newestStoryId}.`
-    );
+  // Get most recent story in db's ID
+  const newestStoryId = await getNewestStoryId(db).catch(console.dir);
+  console.log(
+    `The id of the newest story in the database is ${newestStoryId}.`
+  );
 
-    console.log("Scraping!");
+  console.log("Scraping!");
 
-    const storiesData = await scrapeStories(
-      "http://fiftywordstories.com/category/stories/",
-      newestStoryId
-    );
-    const { stories, scrapeCount } = storiesData;
+  const storiesData = await scrapeStories(
+    "http://fiftywordstories.com/category/stories/",
+    newestStoryId
+  );
+  const { stories, scrapeCount } = storiesData;
 
-    const date = new Date();
-    const utc = date.toUTCString();
+  const date = new Date();
+  const utc = date.toUTCString();
 
-    console.log(
-      `Scraping completed at ${utc}: ${scrapeCount} stories successfully scraped over ${pageCount} pages`
-    );
+  console.log(
+    `Scraping completed at ${utc}: ${scrapeCount} stories successfully scraped over ${pageCount} pages`
+  );
 
-    // Add any scraped stories to the database
-    if (stories.length > 0) {
-      insertToDb(db, stories).catch(console.dir);
-    }
+  // Add any scraped stories to the database
+  if (stories.length > 0) {
+    insertToDb(db, stories).catch(console.dir);
+  }
 
-    // Reset page count
-    pageCount = 0;
-  });
+  // Reset page count
+  pageCount = 0;
 
   // Add stories to the lowdb database such that the most recent story published is positioned at index 0
   // stories.reverse().forEach((story) => {

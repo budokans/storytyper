@@ -2,14 +2,27 @@ import express from "express";
 import cors from "cors";
 import { scrapeStories } from "./lib/scraper";
 import "./lib/cron";
-import db from "./lib/lowDb";
-// import mongoUtil from "./lib/mongoUtil";
+import { connect, getDb } from "./lib/db";
 
 const hostname = "127.0.0.1";
 const port = 2094;
 
 const app = express();
 app.use(cors());
+
+connect((err) => {
+  if (err) {
+    console.log("Unable to connect to database.");
+    process.exit(1);
+  } else {
+    app.listen(port, (err) => {
+      if (err) {
+        throw err;
+      }
+      console.log(`App running at http://${hostname}:${port}/`);
+    });
+  }
+});
 
 app.get("/scrape", async (req, res) => {
   console.log("Scraping!");
@@ -23,14 +36,10 @@ app.get("/scrape", async (req, res) => {
 
 app.get("/data", async (req, res) => {
   console.log("Getting stories from database...");
-  const stories = db.get("stories");
-  // console.log(stories);
-  // const db = mongoUtil.getDb();
-  // const cursor = await db.collection("stories").find({});
-  // const stories = cursor.toArray();
-  res.json(stories);
-});
 
-app.listen(port, () => {
-  console.log(`App running at http://${hostname}:${port}/`);
+  const db = getDb("storytyper");
+  const cursor = await db.collection("stories").find({});
+  const stories = await cursor.toArray();
+
+  res.json(stories);
 });
