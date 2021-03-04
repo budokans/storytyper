@@ -2,7 +2,8 @@ import express from "express";
 import cors from "cors";
 import { scrapeStories } from "./lib/scraper";
 import "./lib/cron";
-import db from "./lib/db";
+import db from "./lib/lowDb";
+// import mongoUtil from "./lib/mongoUtil";
 
 const hostname = "127.0.0.1";
 const port = 2094;
@@ -22,8 +23,11 @@ app.get("/scrape", async (req, res) => {
 
 app.get("/data", async (req, res) => {
   console.log("Getting stories from database...");
-
   const stories = db.get("stories");
+  // console.log(stories);
+  // const db = mongoUtil.getDb();
+  // const cursor = await db.collection("stories").find({});
+  // const stories = cursor.toArray();
   res.json(stories);
 });
 

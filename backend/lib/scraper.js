@@ -3,7 +3,7 @@ import cheerio from "cheerio";
 // import db from "./db";
 import { extractAuthorText, extractTitleText } from "./massageHeaderText";
 import formatStoryText from "./formatStoryText";
-import mongoUtil from "./mongoUtil";
+import { connect, getDb } from "./db";
 
 let pageCount = 0;
 let pageLimit = 4;
@@ -186,9 +186,9 @@ async function getNewestStoryId(db) {
 // Run scrapeStories on a schedule and add scrapes to db
 export async function runCron() {
   // Open connection to db
-  mongoUtil.connectToServer(async (err) => {
+  connect(async (err) => {
     if (err) console.log(err);
-    const db = mongoUtil.getDb();
+    const db = getDb("storytyper");
 
     // Remove collections for a restart/testing
     // await db.dropCollection("stories");
@@ -197,7 +197,7 @@ export async function runCron() {
     // Get most recent story in db's ID
     const newestStoryId = await getNewestStoryId(db).catch(console.dir);
     console.log(
-      `The id of the latest story is ${newestStoryId}! Connection closed.`
+      `The id of the newest story in the database is ${newestStoryId}.`
     );
 
     console.log("Scraping!");
