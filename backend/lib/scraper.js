@@ -126,7 +126,7 @@ async function insertToDb(db, stories) {
   const storiesToEditCollection = db.collection("storiesToEdit");
 
   // Reverse the stories array so that the newest story scraped from the site will be insert with the _id of the highest value, needed for getNewestStoryId
-  // stories = stories.reverse();
+  stories = stories.reverse();
 
   const readyStories = stories.filter((story) => story.author.length >= 1);
   const unreadyStories = stories.filter((story) => story.author.length === 0);
@@ -187,8 +187,8 @@ export async function runCron() {
   const db = getDb("storytyper");
 
   // Remove collections for a restart/testing
-  await db.dropCollection("stories");
-  await db.dropCollection("storiesToEdit");
+  // await db.dropCollection("stories");
+  // await db.dropCollection("storiesToEdit");
 
   // Get most recent story in db's ID
   const newestStoryId = await getNewestStoryId(db).catch(console.dir);
