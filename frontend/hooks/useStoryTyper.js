@@ -61,7 +61,7 @@ export default function useStoryTyper() {
 
   // Starts the game - also checks to see if the game hasn't already been played and is yet to be reset before doing so.
   function startGame() {
-    !isRunning && !gameIsOver && setIsRunning(true);
+    !isRunning && !gameIsOver && currentStory && setIsRunning(true);
   }
 
   // Pass 'start on keypress' handler to onkeypress method when document has loaded
