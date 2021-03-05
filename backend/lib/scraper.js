@@ -6,7 +6,7 @@ import formatStoryText from "./formatStoryText";
 import { getDb } from "./db";
 
 let pageCount = 0;
-let pageLimit = 25;
+let pageLimit = 2;
 
 // Get the HTML of the page to be scraped
 async function getHTML(url) {
@@ -159,6 +159,8 @@ async function insertToDb(db, stories) {
 async function getNewestStoryId(db) {
   const storiesCollection = db.collection("stories");
   const storiesToEditCollection = db.collection("storiesToEdit");
+  const storiesCount = await storiesCollection.countDocuments();
+  const storiesToEditCount = await storiesToEditCollection.countDocuments();
 
   // Sorts collection by _id and gets the id of the most recently added doc
   async function getLatestIdInCollection(collection) {
@@ -171,10 +173,12 @@ async function getNewestStoryId(db) {
     return latestId;
   }
 
-  const mostRecentStoryId = await getLatestIdInCollection(storiesCollection);
-  const mostRecentStoryToEditId = await getLatestIdInCollection(
-    storiesToEditCollection
-  );
+  const mostRecentStoryId =
+    storiesCount > 0 ? await getLatestIdInCollection(storiesCollection) : 0;
+  const mostRecentStoryToEditId =
+    storiesToEditCount > 0
+      ? await getLatestIdInCollection(storiesToEditCollection)
+      : 0;
 
   // Return whichever is higher, i.e. most likely more recent
   return mostRecentStoryId > mostRecentStoryToEditId
@@ -192,8 +196,11 @@ export async function runCron() {
 
   // Get most recent story in db's ID
   const newestStoryId = await getNewestStoryId(db).catch(console.dir);
+
   console.log(
-    `The id of the newest story in the database is ${newestStoryId}.`
+    newestStoryId === 0
+      ? "Database empty at start of scrape"
+      : `The id of the newest story in the database is ${newestStoryId}.`
   );
 
   console.log("Scraping!");
