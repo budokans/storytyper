@@ -24,6 +24,7 @@ export default function useStoryTyper() {
     timeLeftOver && level !== difficulties.length - 1 ? true : false;
   const [batchRequest, setBatchRequest] = useState(0);
   const [isMounted, setIsMounted] = useState(false);
+  const [dbCount, setDbCount] = useState(0);
 
   // Gets the stories array from db and saves it to state on initial render
   useEffect(() => {
@@ -34,6 +35,15 @@ export default function useStoryTyper() {
         setIsMounted(true);
         setBatchRequest(batchRequest + 1);
       });
+  }, []);
+
+  useEffect(() => {
+    fetch("http://localhost:2094/count")
+      .then((res) => res.json())
+      .then((data) => {
+        setDbCount(data.count);
+      })
+      .catch(console.log("Can't find the dbCount"));
   }, []);
 
   // Set a story picked randomly unreadStories to currentStory
@@ -54,14 +64,19 @@ export default function useStoryTyper() {
     setUnreadStories(updatedUnreadStories);
   }
 
-  // If unreadStories is getting low, more stories will be requested from the server.
+  // If unreadStories is getting low, more stories will be requested from the server. If there are no more documents in the db, go back to requesting the first batch
   useEffect(() => {
     if (unreadStories.length === 5) {
       fetch(`http://localhost:2094/data?batch=${batchRequest}`)
         .then((res) => res.json())
         .then((data) => {
           setUnreadStories(unreadStories.concat(data));
-          setBatchRequest(batchRequest + 1);
+          console.log((batchRequest + 1) * 10);
+          if ((batchRequest + 1) * 10 > dbCount) {
+            setBatchRequest(0);
+          } else {
+            setBatchRequest(batchRequest + 1);
+          }
         });
     }
   }, [unreadStories]);
