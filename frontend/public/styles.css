@@ -345,8 +345,12 @@ a scrollbar */
 }
 
   .modal__body {
-    max-width: 35em;
-    margin: 15em auto;
+    max-width: 40em;
+    max-height: 30em;
+    margin-top: calc((100vh - 30em) / 2);
+    margin-left:  auto;
+    margin-right: auto;
+    margin-bottom:   0;
     background: var(--bg-main-light);
     padding: 1.5em 2em 2.5em 2.5em;
     display: grid;
@@ -365,11 +369,14 @@ a scrollbar */
     padding-bottom: 4em;
   }
 
+  .modal__body--story {
+    max-height: 50em;
+    margin-top: calc((100vh - 50em) / 2);
+  }
+
   .modal__body--bg-transparent {
     background: none;
   }
-
- 
 
     .modal__header {
       grid-column: 1;
