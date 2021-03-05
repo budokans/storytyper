@@ -6,7 +6,7 @@ import formatStoryText from "./formatStoryText";
 import { getDb } from "./db";
 
 let pageCount = 0;
-let pageLimit = 2;
+let pageLimit = 5;
 
 // Get the HTML of the page to be scraped
 async function getHTML(url) {
@@ -43,7 +43,9 @@ async function scrapePage(url, newestStoryId) {
       const author = extractAuthorText(headerText).trim();
       const title = extractTitleText(headerText).trim();
       const url = $(el).find(".entry-title a").attr("href");
-      const bio = $(el).find("hr").next().html().trim();
+      const bio = $(el).find("hr").next().html()
+        ? $(el).find("hr").next().html().trim()
+        : "Bio not found...";
       const dateScraped = utc;
 
       // Get story with HTML intact for 'show formatting' view on front end.
@@ -52,7 +54,9 @@ async function scrapePage(url, newestStoryId) {
         .find(".entry-content")
         .each((i, el) => {
           const postContent = $(el).html().trim().replace(/\n/g, "");
-          storyHTML = postContent.slice(0, postContent.indexOf("<hr>"));
+          const hrExists = postContent.includes("<hr>");
+          const endOfStory = hrExists ? "<hr>" : "<div";
+          storyHTML = postContent.slice(0, postContent.indexOf(endOfStory));
         });
 
       // Format story text for use in game as reference text for the typing race.
@@ -159,8 +163,6 @@ async function insertToDb(db, stories) {
 async function getNewestStoryId(db) {
   const storiesCollection = db.collection("stories");
   const storiesToEditCollection = db.collection("storiesToEdit");
-  const storiesCount = await storiesCollection.countDocuments();
-  const storiesToEditCount = await storiesToEditCollection.countDocuments();
 
   // Sorts collection by _id and gets the id of the most recently added doc
   async function getLatestIdInCollection(collection) {
@@ -173,12 +175,10 @@ async function getNewestStoryId(db) {
     return latestId;
   }
 
-  const mostRecentStoryId =
-    storiesCount > 0 ? await getLatestIdInCollection(storiesCollection) : 0;
-  const mostRecentStoryToEditId =
-    storiesToEditCount > 0
-      ? await getLatestIdInCollection(storiesToEditCollection)
-      : 0;
+  const mostRecentStoryId = await getLatestIdInCollection(storiesCollection);
+  const mostRecentStoryToEditId = await getLatestIdInCollection(
+    storiesToEditCollection
+  );
 
   // Return whichever is higher, i.e. most likely more recent
   return mostRecentStoryId > mostRecentStoryToEditId
@@ -198,15 +198,13 @@ export async function runCron() {
   const newestStoryId = await getNewestStoryId(db).catch(console.dir);
 
   console.log(
-    newestStoryId === 0
-      ? "Database empty at start of scrape"
-      : `The id of the newest story in the database is ${newestStoryId}.`
+    `The id of the newest story in the database is ${newestStoryId}.`
   );
 
   console.log("Scraping!");
 
   const storiesData = await scrapeStories(
-    "http://fiftywordstories.com/category/stories/",
+    "http://fiftywordstories.com/category/stories/page/6",
     newestStoryId
   );
   const { stories, scrapeCount } = storiesData;

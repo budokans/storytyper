@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { scrapeStories } from "./lib/scraper";
+import { runCron, scrapeStories } from "./lib/scraper";
 import "./lib/cron";
 import { connect, getDb } from "./lib/db";
 
@@ -20,6 +20,7 @@ connect((err) => {
         throw err;
       }
       console.log(`App running at http://${hostname}:${port}/`);
+      runCron();
     });
   }
 });
@@ -28,7 +29,7 @@ app.get("/scrape", async (req, res) => {
   console.log("Scraping!");
 
   const storiesData = await scrapeStories(
-    "http://fiftywordstories.com/category/stories"
+    "http://fiftywordstories.com/category/stories/"
   );
   const { stories } = storiesData;
   res.json(stories);
