@@ -37,14 +37,14 @@ app.get("/scrape", async (req, res) => {
 app.get("/data", async (req, res) => {
   console.log("Getting stories from database...");
 
-  const skipMultiplier = 5;
+  const skipMultiplier = 10;
   const batchRequest = req.query.batch;
   const skipVal = skipMultiplier * batchRequest;
 
   const db = getDb("storytyper");
   // const cursor = await db.collection("stories").find();
   const cursor = await db.collection("stories").find().sort({ _id: -1 });
-  const batch = await cursor.skip(skipVal).limit(3);
+  const batch = await cursor.skip(skipVal).limit(skipMultiplier);
   const stories = await batch.toArray();
 
   res.json(stories);

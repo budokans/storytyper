@@ -4,7 +4,6 @@ import difficulties from "../difficulties.json";
 export default function useStoryTyper() {
   const [unreadStories, setUnreadStories] = useState([]);
   const [currentStory, setCurrentStory] = useState({});
-  const [completedStories, setCompletedStories] = useState([]);
   const [level, setLevel] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [text, setText] = useState("");
@@ -24,6 +23,7 @@ export default function useStoryTyper() {
   const playerShouldLevelUp =
     timeLeftOver && level !== difficulties.length - 1 ? true : false;
   const [batchRequest, setBatchRequest] = useState(0);
+  const [isMounted, setIsMounted] = useState(false);
 
   // Gets the stories array from db and saves it to state on initial render
   useEffect(() => {
@@ -31,41 +31,32 @@ export default function useStoryTyper() {
       .then((res) => res.json())
       .then((data) => {
         setUnreadStories(data);
+        setIsMounted(true);
         setBatchRequest(batchRequest + 1);
       });
   }, []);
 
-  console.log(unreadStories);
-
-  // Randomly selects story to be displayed in the StoryBox on game start/restart.
-  useEffect(() => {
+  // Set a story picked randomly unreadStories to currentStory
+  function getFreshCurrentStory() {
     const currentStoryIdx = Math.floor(Math.random() * unreadStories.length);
     setCurrentStory(unreadStories[currentStoryIdx]);
-  }, [unreadStories]);
+  }
 
-  // Renders a new story that the user hasn't yet seen/typed
-  function nextStory() {
-    // Adding current story to completedStories
-    // const updatedCompletedStories = completedStories;
-    // updatedCompletedStories.splice(completedStories.length, 0, currentStory);
-    // setCompletedStories(updatedCompletedStories);
+  useEffect(() => {
+    getFreshCurrentStory();
+  }, [isMounted]);
 
-    // Removing current story from unreadStories
+  // Remove the completed story from unreadStories
+  function updateUnreadStories() {
     const updatedUnreadStories = unreadStories.filter(
       (story) => story !== currentStory
     );
     setUnreadStories(updatedUnreadStories);
-
-    // If unreadStories is empty, unreadStories and completedStories will be reset to their initial states and the player can play through them all again.
-    // if (unreadStories.length === 1) {
-    //   setUnreadStories(completedStories);
-    //   setCompletedStories([]);
-    // }
   }
 
-  // If unreadStories is empty, more stories will be requested from the server.
+  // If unreadStories is getting low, more stories will be requested from the server.
   useEffect(() => {
-    if (unreadStories.length === 0) {
+    if (unreadStories.length === 5) {
       fetch(`http://localhost:2094/data?batch=${batchRequest}`)
         .then((res) => res.json())
         .then((data) => {
@@ -75,7 +66,6 @@ export default function useStoryTyper() {
     }
   }, [unreadStories]);
 
-  // Starts the game - also checks to see if the game hasn't already been played and is yet to be reset before doing so.
   function startGame() {
     !isRunning && !gameIsOver && currentStory && setIsRunning(true);
   }
@@ -258,7 +248,8 @@ export default function useStoryTyper() {
   // High score will be set if it has been achieved
   function handleNextStoryClick() {
     handlePlayAgainClick();
-    nextStory();
+    updateUnreadStories();
+    getFreshCurrentStory();
   }
 
   // Handles clicking of the close button inside the Modal
