@@ -23,15 +23,19 @@ export default function useStoryTyper() {
   const [gameOverModalClosed, setGameOverModalClosed] = useState(false);
   const playerShouldLevelUp =
     timeLeftOver && level !== difficulties.length - 1 ? true : false;
+  const [batchRequest, setBatchRequest] = useState(0);
 
   // Gets the stories array from db and saves it to state on initial render
   useEffect(() => {
-    fetch("http://localhost:2094/data")
+    fetch(`http://localhost:2094/data?batch=${batchRequest}`)
       .then((res) => res.json())
       .then((data) => {
         setUnreadStories(data);
+        setBatchRequest(batchRequest + 1);
       });
   }, []);
+
+  console.log(unreadStories);
 
   // Randomly selects story to be displayed in the StoryBox on game start/restart.
   useEffect(() => {
@@ -42,9 +46,9 @@ export default function useStoryTyper() {
   // Renders a new story that the user hasn't yet seen/typed
   function nextStory() {
     // Adding current story to completedStories
-    const updatedCompletedStories = completedStories;
-    updatedCompletedStories.splice(completedStories.length, 0, currentStory);
-    setCompletedStories(updatedCompletedStories);
+    // const updatedCompletedStories = completedStories;
+    // updatedCompletedStories.splice(completedStories.length, 0, currentStory);
+    // setCompletedStories(updatedCompletedStories);
 
     // Removing current story from unreadStories
     const updatedUnreadStories = unreadStories.filter(
@@ -53,11 +57,23 @@ export default function useStoryTyper() {
     setUnreadStories(updatedUnreadStories);
 
     // If unreadStories is empty, unreadStories and completedStories will be reset to their initial states and the player can play through them all again.
-    if (unreadStories.length === 1) {
-      setUnreadStories(completedStories);
-      setCompletedStories([]);
-    }
+    // if (unreadStories.length === 1) {
+    //   setUnreadStories(completedStories);
+    //   setCompletedStories([]);
+    // }
   }
+
+  // If unreadStories is empty, more stories will be requested from the server.
+  useEffect(() => {
+    if (unreadStories.length === 0) {
+      fetch(`http://localhost:2094/data?batch=${batchRequest}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setUnreadStories(unreadStories.concat(data));
+          setBatchRequest(batchRequest + 1);
+        });
+    }
+  }, [unreadStories]);
 
   // Starts the game - also checks to see if the game hasn't already been played and is yet to be reset before doing so.
   function startGame() {

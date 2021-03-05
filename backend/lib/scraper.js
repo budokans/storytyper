@@ -204,7 +204,7 @@ export async function runCron() {
   console.log("Scraping!");
 
   const storiesData = await scrapeStories(
-    "http://fiftywordstories.com/category/stories/page/6",
+    "http://fiftywordstories.com/category/stories/",
     newestStoryId
   );
   const { stories, scrapeCount } = storiesData;
