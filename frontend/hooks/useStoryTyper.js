@@ -34,7 +34,9 @@ export default function useStoryTyper() {
         setUnreadStories(data);
         setIsMounted(true);
         setBatchRequest(batchRequest + 1);
-      });
+        console.log("Success: stories received from db");
+      })
+      .catch(console.log("Can't get stories from db"));
   }, []);
 
   useEffect(() => {
@@ -42,6 +44,7 @@ export default function useStoryTyper() {
       .then((res) => res.json())
       .then((data) => {
         setDbCount(data.count);
+        console.log("Success: count received from db");
       })
       .catch(console.log("Can't find the dbCount"));
   }, []);

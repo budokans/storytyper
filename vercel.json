@@ -1,0 +1,7 @@
+{
+  "name": "storytyper",
+  "version": 1,
+  "env": {
+    "MONGODB_URI": "@st-mongodb-uri"
+  }
+}
