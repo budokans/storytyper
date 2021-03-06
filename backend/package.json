@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon -r esm index.js",
+    "start": "node -r esm index.js",
     "lint": "eslint ./"
   },
   "keywords": [],

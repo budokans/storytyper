@@ -74,7 +74,6 @@ export default function useStoryTyper() {
         .then((res) => res.json())
         .then((data) => {
           setUnreadStories(unreadStories.concat(data));
-          console.log((batchRequest + 1) * 10);
           if ((batchRequest + 1) * 10 > dbCount) {
             setBatchRequest(0);
           } else {
