@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { runCron, scrapeStories } from "./lib/scraper";
+import { scrapeStories } from "./lib/scraper";
 import "./lib/cron";
 import { connect, getDb } from "./lib/db";
 
@@ -35,7 +35,10 @@ app.get("/scrape", async (req, res) => {
 });
 
 app.get("/data", async (req, res) => {
-  console.log("Getting stories from database...");
+  const date = new Date();
+  const utc = date.toUTCString();
+
+  console.log(`${utc}: Getting stories from database...`);
 
   const db = getDb("storytyper");
 
@@ -51,8 +54,14 @@ app.get("/data", async (req, res) => {
 });
 
 app.get("/count", async (req, res) => {
+  const date = new Date();
+  const utc = date.toUTCString();
+
   const db = getDb("storytyper");
   const storiesCollection = db.collection("stories");
   const storiesCount = await storiesCollection.countDocuments();
+
+  console.log(`${utc}: Getting documents count... count = ${storiesCount}`);
+
   res.json({ count: storiesCount });
 });
