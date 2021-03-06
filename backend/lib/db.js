@@ -1,13 +1,13 @@
 import { MongoClient } from "mongodb";
-import config from "../conf/mongoConfig";
-
-const uri = `mongodb+srv://${config.user}:${config.pass}@${config.cluster}.mongodb.net/storytyper?retryWrites=true&w=majority`;
+require("dotenv").config();
 
 let client = null;
 
 function connect(callback) {
   if (client === null) {
-    client = new MongoClient(uri, { useUnifiedTopology: true });
+    client = new MongoClient(process.env.MONGO_URI, {
+      useUnifiedTopology: true,
+    });
     client.connect((err) => {
       if (err) {
         client = null;

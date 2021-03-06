@@ -4,8 +4,8 @@ import { scrapeStories } from "./lib/scraper";
 import "./lib/cron";
 import { connect, getDb } from "./lib/db";
 
-const hostname = "127.0.0.1";
-const port = 2094;
+const hostname = process.env.hostname;
+const port = process.env.port;
 
 const app = express();
 app.use(cors());

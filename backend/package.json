@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon -r esm index.js",
+    "dev": "nodemon -r esm -r dotenv/config index.js",
     "start": "node -r esm index.js",
     "lint": "eslint ./"
   },
@@ -15,6 +15,7 @@
     "axios": "^0.21.1",
     "cheerio": "^1.0.0-rc.5",
     "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
     "esm": "^3.2.25",
     "express": "^4.17.1",
     "mongodb": "^3.6.4",
@@ -23,5 +24,8 @@
   "devDependencies": {
     "eslint": "^7.19.0",
     "nodemon": "^2.0.7"
+  },
+  "engines": {
+    "node": "14.15.4"
   }
 }

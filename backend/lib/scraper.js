@@ -21,11 +21,10 @@ async function scrapePage(url, newestStoryId) {
   let storiesArray = [];
   let scrapeCount = 0;
   let upToDate = false;
-  // const latestDbStoryId = db.get("stories[0].id").value();
+  pageCount++;
 
   const date = new Date();
   const utc = date.toUTCString();
-  pageCount++;
 
   console.log(`Scraping ${url}...`);
 
@@ -79,6 +78,7 @@ async function scrapePage(url, newestStoryId) {
 
   // Get the link to the next oldest page if it exists
   const paginationLink = $(".nav-previous a").attr("href");
+
   return {
     stories: storiesArray,
     scrapeCount: scrapeCount,
