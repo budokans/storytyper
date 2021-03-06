@@ -1,14 +1,18 @@
 import express from "express";
 import cors from "cors";
+import compression from "compression";
+import helmet from "helmet";
 import { scrapeStories } from "./lib/scraper";
 import "./lib/cron";
 import { connect, getDb } from "./lib/db";
 
-const hostname = process.env.hostname;
-const port = process.env.port;
+const hostname = "127.0.0.1";
+const port = "2094";
 
 const app = express();
 app.use(cors());
+app.use(compression());
+app.use(helmet());
 
 connect((err) => {
   if (err) {
