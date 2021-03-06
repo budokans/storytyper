@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon -r esm index.js --ignore db.json",
+    "dev": "nodemon -r esm index.js",
     "lint": "eslint ./"
   },
   "keywords": [],
@@ -16,7 +16,6 @@
     "cors": "^2.8.5",
     "esm": "^3.2.25",
     "express": "^4.17.1",
-    "lowdb": "^1.0.0",
     "mongodb": "^3.6.4",
     "node-cron": "^2.0.3"
   },

@@ -1,12 +1,11 @@
 import axios from "axios";
 import cheerio from "cheerio";
-// import db from "./db";
 import { extractAuthorText, extractTitleText } from "./massageHeaderText";
 import formatStoryText from "./formatStoryText";
 import { getDb } from "./db";
 
 let pageCount = 0;
-// let pageLimit = 5;
+// let pageLimit = 25;
 
 // Get the HTML of the page to be scraped
 async function getHTML(url) {
@@ -191,15 +190,11 @@ export async function runCron() {
   const db = getDb("storytyper");
 
   // Remove collections for a restart/testing
-  await db.dropCollection("stories");
-  await db.dropCollection("storiesToEdit");
+  // await db.dropCollection("stories");
+  // await db.dropCollection("storiesToEdit");
 
   // Get most recent story in db's ID
   const newestStoryId = await getNewestStoryId(db).catch(console.dir);
-
-  console.log(
-    `The id of the newest story in the database is ${newestStoryId}.`
-  );
 
   console.log("Scraping!");
 
@@ -222,14 +217,4 @@ export async function runCron() {
   }
 
   pageCount = 0;
-
-  // Add stories to the lowdb database such that the most recent story published is positioned at index 0
-  // stories.reverse().forEach((story) => {
-  //   story.dateScraped = utc;
-
-  //   // Check if the story has an author. If not, push to storiesToEdit array
-  //   story.author
-  //     ? db.get("stories").unshift(story).write()
-  //     : db.get("storiesToEdit").unshift(story).write();
-  // });
 }
