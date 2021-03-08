@@ -1,5 +1,5 @@
 import { MongoClient } from "mongodb";
-require("dotenv").config();
+import { config } from "dotenv";
 
 let client = null;
 
