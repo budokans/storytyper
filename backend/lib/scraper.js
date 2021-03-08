@@ -13,7 +13,7 @@ async function getHTML(url) {
   return html;
 }
 
-// Capture the data from each story post in an object and push to an array
+// Capture the story data from the page
 async function scrapePage(url, newestStoryId) {
   const html = await getHTML(url);
   const $ = cheerio.load(html);
@@ -97,7 +97,7 @@ async function waitToScrape(url, newestStoryId) {
   return await scrapeStories(url, newestStoryId);
 }
 
-// Scrape url for new stories
+// Scrape (potentially) the entire site for new stories
 export async function scrapeStories(url, newestStoryId) {
   const storiesFragment = await scrapePage(url, newestStoryId);
 
