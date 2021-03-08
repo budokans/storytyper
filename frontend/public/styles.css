@@ -371,7 +371,7 @@ a scrollbar */
 
   .modal__body--story {
     max-height: 50em;
-    margin-top: calc((100vh - 50em) / 2);
+    margin-top: calc((100vh - 40em) / 2);
   }
 
   .modal__body--bg-transparent {
@@ -757,8 +757,7 @@ a scrollbar */
   visibility: hidden;
 }
 
-.out-link,
-.modal__body--story a {
+.out-link {
   font-weight: bolder;
 }
 

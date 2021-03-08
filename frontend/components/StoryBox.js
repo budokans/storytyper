@@ -36,6 +36,10 @@ function StoryBox({ currentStory, gameIsOver }) {
     "gameplay-box--story__btn--clicked": formattedIsShowing,
   });
 
+  function addClassToBio() {
+    return currentStory.bio.replace(/<a/g, '<a class="out-link"');
+  }
+
   return (
     <div className={wrapperClass}>
       {currentStory && gameIsOver && (
@@ -75,7 +79,12 @@ function StoryBox({ currentStory, gameIsOver }) {
 
           <p className="gameplay-box--story__attribution  span-grid-width  grid-centered  ">
             Story originally published on{" "}
-            <a className="out-link" href={currentStory.url} target="_blank">
+            <a
+              className="out-link"
+              href={currentStory.url}
+              target="_blank"
+              rel="noopener"
+            >
               50-Word Stories.
             </a>
           </p>
@@ -92,7 +101,7 @@ function StoryBox({ currentStory, gameIsOver }) {
             <h2>{currentStory.author}</h2>
           </header>
           <p className="span-grid-width">
-            {currentStory.bio && parse(currentStory.bio)}
+            {currentStory.bio && parse(addClassToBio())}
           </p>
         </Modal>
       )}
@@ -101,7 +110,7 @@ function StoryBox({ currentStory, gameIsOver }) {
 }
 
 StoryBox.propTypes = {
-  currentStory: PropTypes.object.isRequired,
+  currentStory: PropTypes.object,
   gameIsOver: PropTypes.bool.isRequired,
 };
 
