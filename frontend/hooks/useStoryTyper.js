@@ -28,7 +28,7 @@ export default function useStoryTyper() {
 
   // Gets the stories array from db and saves it to state on initial render
   useEffect(() => {
-    fetch(`http://localhost:2094/data?batch=${batchRequest}`)
+    fetch(`https://storytyper.herokuapp.com/data?batch=${batchRequest}`)
       .then((res) => res.json())
       .then((data) => {
         setUnreadStories(data);
@@ -40,7 +40,7 @@ export default function useStoryTyper() {
   }, []);
 
   useEffect(() => {
-    fetch("http://localhost:2094/count")
+    fetch("https://storytyper.herokuapp.com/count")
       .then((res) => res.json())
       .then((data) => {
         setDbCount(data.count);
@@ -70,7 +70,7 @@ export default function useStoryTyper() {
   // If unreadStories is getting low, more stories will be requested from the server. If there are no more documents in the db, go back to requesting the first batch
   useEffect(() => {
     if (unreadStories.length === 5) {
-      fetch(`http://localhost:2094//data?batch=${batchRequest}`)
+      fetch(`hhttps://storytyper.herokuapp.com/data?batch=${batchRequest}`)
         .then((res) => res.json())
         .then((data) => {
           setUnreadStories(unreadStories.concat(data));
