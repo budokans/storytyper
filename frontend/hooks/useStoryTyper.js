@@ -207,7 +207,7 @@ export default function useStoryTyper() {
     }
   };
 
-  const wordCount = gameIsOver && calculateWordCount();
+  const wordCount = gameIsOver ? calculateWordCount() : 0;
 
   // Calculates WPM
   const wpm = Math.floor(
@@ -228,8 +228,9 @@ export default function useStoryTyper() {
 
   // Calculates efficiency
   const efficiency =
-    cpm > 0 &&
-    Math.round(100 * (charCount / (charCount + inefficientKeyStrokesCount)));
+    cpm > 0
+      ? Math.round(100 * (charCount / (charCount + inefficientKeyStrokesCount)))
+      : 0;
 
   // Functionality that all of the PlayButtons need for their various reset types. Note: resets height of textarea to the maximum without scrollbar.
   function basicReset() {

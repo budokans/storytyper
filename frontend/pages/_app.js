@@ -1,8 +1,9 @@
 import { ThemeContextProvider } from "../context/themeContext";
+import PropTypes from "prop-types";
 import ClientOnly from "../components/ClientOnly";
 import "../public/styles.css";
 
-export default function App({ Component, pageProps }) {
+function App({ Component, pageProps }) {
   return (
     <ClientOnly>
       <ThemeContextProvider>
@@ -11,3 +12,11 @@ export default function App({ Component, pageProps }) {
     </ClientOnly>
   );
 }
+
+App.propTypes = {
+  Component: PropTypes.oneOfType([PropTypes.func, PropTypes.element])
+    .isRequired,
+  pageProps: PropTypes.object,
+};
+
+export default App;

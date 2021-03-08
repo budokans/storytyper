@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { useThemeContext } from "../context/themeContext";
 import useModalToggler from "../hooks/useModalToggler";
+import PropTypes from "prop-types";
 import parse from "html-react-parser";
 import classNames from "classnames";
 import Button from "./Button";
 import Modal from "./Modal";
 
-export default function StoryBox({ currentStory, gameIsOver }) {
+function StoryBox({ currentStory, gameIsOver }) {
   const [modalIsShowing, handleToggleModal] = useModalToggler();
   const [formattedIsShowing, setFormattedIsShowing] = useState(false);
 
@@ -98,3 +99,10 @@ export default function StoryBox({ currentStory, gameIsOver }) {
     </div>
   );
 }
+
+StoryBox.propTypes = {
+  currentStory: PropTypes.object.isRequired,
+  gameIsOver: PropTypes.bool.isRequired,
+};
+
+export default StoryBox;

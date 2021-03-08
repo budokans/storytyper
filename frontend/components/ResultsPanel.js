@@ -1,4 +1,5 @@
 import { useThemeContext } from "../context/themeContext";
+import PropTypes from "prop-types";
 import classNames from "classnames";
 import Difficulty from "./Difficulty";
 import HighScore from "./HighScore";
@@ -6,7 +7,7 @@ import Stats from "./Stats";
 import PlayAgainControls from "./PlayAgainControls";
 import Button from "./Button";
 
-export default function ResultsPanel(props) {
+function ResultsPanel(props) {
   const {
     onChangeStory,
     onRestartClick,
@@ -75,3 +76,21 @@ export default function ResultsPanel(props) {
     </section>
   );
 }
+
+ResultsPanel.propTypes = {
+  onChangeStory: PropTypes.func,
+  onRestartClick: PropTypes.func,
+  onPlayAgainClick: PropTypes.func,
+  highScore: PropTypes.number.isRequired,
+  wpm: PropTypes.number.isRequired,
+  cpm: PropTypes.number.isRequired,
+  inefficientKeyStrokesCount: PropTypes.number.isRequired,
+  isRunning: PropTypes.bool.isRequired,
+  gameIsOver: PropTypes.bool.isRequired,
+  efficiency: PropTypes.number.isRequired,
+  level: PropTypes.number.isRequired,
+  gameOverModalClosed: PropTypes.bool.isRequired,
+  playerShouldLevelUp: PropTypes.bool.isRequired,
+};
+
+export default ResultsPanel;

@@ -1,8 +1,9 @@
 import { useRef } from "react";
 import classNames from "classnames";
 import { useThemeContext } from "../context/themeContext";
+import PropTypes from "prop-types";
 
-export default function Modal({
+function Modal({
   modalIsShowing,
   onToggleModal,
   modalBodyIsTransparent,
@@ -44,3 +45,13 @@ export default function Modal({
     </div>
   );
 }
+
+Modal.propTypes = {
+  modalIsShowing: PropTypes.bool.isRequired,
+  onToggleModal: PropTypes.func.isRequired,
+  modalBodyIsTransparent: PropTypes.bool,
+  modalBodyClass: PropTypes.string,
+  children: PropTypes.node.isRequired,
+};
+
+export default Modal;

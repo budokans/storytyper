@@ -1,10 +1,11 @@
 import { useThemeContext } from "../context/themeContext";
 import useModalToggler from "../hooks/useModalToggler";
 import classNames from "classnames";
+import PropTypes from "prop-types";
 import Button from "./Button";
 import Modal from "./Modal";
 
-export default function Stats({
+function Stats({
   wpm,
   cpm,
   inefficientKeyStrokesCount,
@@ -52,3 +53,13 @@ export default function Stats({
     </>
   );
 }
+
+Stats.propTypes = {
+  wpm: PropTypes.number.isRequired,
+  cpm: PropTypes.number.isRequired,
+  inefficientKeyStrokesCount: PropTypes.number.isRequired,
+  efficiency: PropTypes.number.isRequired,
+  gameOverModalClosed: PropTypes.bool.isRequired,
+};
+
+export default Stats;

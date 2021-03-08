@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import classNames from "classnames";
+import PropTypes from "prop-types";
 
-export default function TypingBox(props) {
+function TypingBox(props) {
   const {
     countdown,
     text,
@@ -73,3 +74,18 @@ export default function TypingBox(props) {
     </>
   );
 }
+
+TypingBox.propTypes = {
+  countdown: PropTypes.number.isRequired,
+  text: PropTypes.string.isRequired,
+  isRunning: PropTypes.bool.isRequired,
+  textareaRef: PropTypes.object.isRequired,
+  startGame: PropTypes.func.isRequired,
+  onTextChange: PropTypes.func.isRequired,
+  gameIsOver: PropTypes.bool.isRequired,
+  wordCount: PropTypes.number.isRequired,
+  errorPresent: PropTypes.bool.isRequired,
+  theme: PropTypes.string.isRequired,
+};
+
+export default TypingBox;

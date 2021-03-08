@@ -1,7 +1,8 @@
 import { useThemeContext } from "../context/themeContext";
 import Button from "./Button";
+import PropTypes from "prop-types";
 
-export default function PlayAgainControls({
+function PlayAgainControls({
   onRestartClick,
   onPlayAgainClick,
   onChangeStory,
@@ -30,3 +31,13 @@ export default function PlayAgainControls({
     </>
   );
 }
+
+PlayAgainControls.propTypes = {
+  onRestartClick: PropTypes.func,
+  onPlayAgainClick: PropTypes.func,
+  onChangeStory: PropTypes.func,
+  isRunning: PropTypes.bool.isRequired,
+  gameIsOver: PropTypes.bool.isRequired,
+};
+
+export default PlayAgainControls;

@@ -1,7 +1,8 @@
 import { useThemeContext } from "../context/themeContext";
 import classNames from "classnames";
+import PropTypes from "prop-types";
 
-export default function Countdown({ countdown, isRunning }) {
+function Countdown({ countdown, isRunning }) {
   function countdownDisplayText() {
     if (countdown === 2 && isRunning) return "Ready!";
     else if (countdown === 1) return "Set!";
@@ -19,3 +20,10 @@ export default function Countdown({ countdown, isRunning }) {
 
   return <h3 className={countdownClass}>{countdownDisplayText()}</h3>;
 }
+
+Countdown.propTypes = {
+  countdown: PropTypes.number.isRequired,
+  isRunning: PropTypes.bool.isRequired,
+};
+
+export default Countdown;

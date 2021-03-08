@@ -1,4 +1,6 @@
-export default function Button({ buttonClass, onClick, children, ...props }) {
+import PropTypes from "prop-types";
+
+function Button({ buttonClass, onClick, children, ...props }) {
   return (
     <>
       <button className={buttonClass} onClick={onClick} {...props}>
@@ -7,3 +9,11 @@ export default function Button({ buttonClass, onClick, children, ...props }) {
     </>
   );
 }
+
+Button.propTypes = {
+  buttonClass: PropTypes.string,
+  onClick: PropTypes.func,
+  children: PropTypes.string.isRequired,
+};
+
+export default Button;

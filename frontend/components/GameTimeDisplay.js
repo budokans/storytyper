@@ -1,7 +1,8 @@
 import { useThemeContext } from "../context/themeContext";
 import classNames from "classnames";
+import PropTypes from "prop-types";
 
-export default function GameTimeRemaining({ gameTimeRemaining, timeLeftOver }) {
+function GameTimeRemaining({ gameTimeRemaining, timeLeftOver }) {
   const { theme } = useThemeContext();
 
   const gameTimeClass = classNames({
@@ -19,3 +20,10 @@ export default function GameTimeRemaining({ gameTimeRemaining, timeLeftOver }) {
     </div>
   );
 }
+
+GameTimeRemaining.propTypes = {
+  gameTimeRemaining: PropTypes.number.isRequired,
+  timeLeftOver: PropTypes.number.isRequired,
+};
+
+export default GameTimeRemaining;

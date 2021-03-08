@@ -1,16 +1,11 @@
 import classNames from "classnames";
 import { useThemeContext } from "../context/themeContext";
+import PropTypes from "prop-types";
 
-export default function HighScore({
-  highScore,
-  wpm,
-  gameOverModalClosed,
-  gameIsOver,
-}) {
+function HighScore({ highScore, wpm, gameOverModalClosed, gameIsOver }) {
   let highScoreAlreadyAchieved =
     highScore !== 0 || wpm > highScore ? true : false;
 
-  // Gets the text to display as high score. If the player hasn't yet set a high score, the text will read TBC. Otherwise it will be updated if a new score is set, or remain unchanged if not.
   function getHighScoreDisplay() {
     if (highScoreAlreadyAchieved) {
       return wpm > highScore ? `${wpm} wpm` : `${highScore} wpm`;
@@ -46,3 +41,12 @@ export default function HighScore({
     </div>
   );
 }
+
+HighScore.propTypes = {
+  highScore: PropTypes.number.isRequired,
+  wpm: PropTypes.number.isRequired,
+  gameOverModalClosed: PropTypes.bool.isRequired,
+  gameIsOver: PropTypes.bool.isRequired,
+};
+
+export default HighScore;

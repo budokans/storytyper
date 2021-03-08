@@ -1,11 +1,12 @@
 import useModalToggler from "../hooks/useModalToggler";
 import classNames from "classnames";
+import PropTypes from "prop-types";
 import { useThemeContext } from "../context/themeContext";
 import Button from "./Button";
 import Modal from "./Modal";
 import difficulties from "../difficulties.json";
 
-export default function Difficulty(props) {
+function Difficulty(props) {
   const { level, gameOverModalClosed, playerShouldLevelUp, gameIsOver } = props;
   const [modalIsShowing, handleToggleModal] = useModalToggler();
 
@@ -72,3 +73,12 @@ export default function Difficulty(props) {
     </div>
   );
 }
+
+Difficulty.propTypes = {
+  level: PropTypes.number.isRequired,
+  gameOverModalClosed: PropTypes.bool.isRequired,
+  playerShouldLevelUp: PropTypes.bool.isRequired,
+  gameIsOver: PropTypes.bool.isRequired,
+};
+
+export default Difficulty;
