@@ -70,7 +70,7 @@ export default function useStoryTyper() {
   // If unreadStories is getting low, more stories will be requested from the server. If there are no more documents in the db, go back to requesting the first batch
   useEffect(() => {
     if (unreadStories.length === 5) {
-      fetch(`hhttps://storytyper.herokuapp.com/data?batch=${batchRequest}`)
+      fetch(`https://storytyper.herokuapp.com/data?batch=${batchRequest}`)
         .then((res) => res.json())
         .then((data) => {
           setUnreadStories(unreadStories.concat(data));
