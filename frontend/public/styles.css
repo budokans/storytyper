@@ -358,6 +358,10 @@ a scrollbar */
     border: 2px solid var(--bg-box-even-darker);
   }
 
+  .modal__body:focus {
+    outline: none;
+  }
+
   .modal__body--bg-dark {
     background: black;
     color: var(--text-light);
