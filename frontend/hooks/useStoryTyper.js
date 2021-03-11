@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import difficulties from "../difficulties.json";
+import storiesData from "../public/storiesData.json";
 
 export default function useStoryTyper() {
   const [unreadStories, setUnreadStories] = useState([]);
@@ -23,30 +24,47 @@ export default function useStoryTyper() {
   const playerShouldLevelUp =
     timeLeftOver && level !== difficulties.length - 1 ? true : false;
   const [batchRequest, setBatchRequest] = useState(0);
-  const [isMounted, setIsMounted] = useState(false);
+  const [storiesAreLoaded, setStoriesAreLoaded] = useState(false);
   const [dbCount, setDbCount] = useState(0);
+
+  async function getDbData(url) {
+    const res = await fetch(url);
+    const data = await res.json();
+    return data;
+  }
 
   // Gets the stories array from db and saves it to state on initial render
   useEffect(() => {
-    fetch(`https://storytyper.herokuapp.com/data?batch=${batchRequest}`)
-      .then((res) => res.json())
+    getDbData(`https://storytyper.herokuapp.com/data?batch=${batchRequest}`)
       .then((data) => {
         setUnreadStories(data);
-        setIsMounted(true);
         setBatchRequest(batchRequest + 1);
+        setStoriesAreLoaded(true);
         console.log("Success: stories received from db");
       })
-      .catch(console.log("Can't get stories from db"));
+      .catch((err) => {
+        setUnreadStories(storiesData);
+        setStoriesAreLoaded(true);
+        console.log(err);
+        console.log("Warning: db unavailable - local stories data used");
+      });
   }, []);
 
-  useEffect(() => {
-    fetch("https://storytyper.herokuapp.com/count")
-      .then((res) => res.json())
+  function getDbCount() {
+    getDbData("https://storytyper.herokuapp.com/count")
       .then((data) => {
         setDbCount(data.count);
         console.log("Success: count received from db");
       })
-      .catch(console.log("Can't find the dbCount"));
+      .catch((err) => {
+        console.log(err);
+        console.log("Can't find the dbCount");
+      });
+  }
+
+  // Find the number of stories available in the database and save to state.
+  useEffect(() => {
+    getDbCount();
   }, []);
 
   // Set a story picked randomly unreadStories to currentStory
@@ -57,7 +75,7 @@ export default function useStoryTyper() {
 
   useEffect(() => {
     getFreshCurrentStory();
-  }, [isMounted]);
+  }, [storiesAreLoaded]);
 
   // Remove the completed story from unreadStories
   function updateUnreadStories() {
@@ -67,18 +85,26 @@ export default function useStoryTyper() {
     setUnreadStories(updatedUnreadStories);
   }
 
-  // If unreadStories is getting low, more stories will be requested from the server. If there are no more documents in the db, go back to requesting the first batch
+  // If unreadStories is getting low, more stories will be requested from the server or, if it fails, the local storiesData. If there are no more documents in the db, go back to requesting the first batch.
   useEffect(() => {
     if (unreadStories.length === 5) {
-      fetch(`https://storytyper.herokuapp.com/data?batch=${batchRequest}`)
-        .then((res) => res.json())
+      getDbData(`https://storytyper.herokuapp.com/data?batch=${batchRequest}`)
         .then((data) => {
           setUnreadStories(unreadStories.concat(data));
-          if ((batchRequest + 1) * 10 > dbCount) {
+          // If initial render getDbCount call was unsuccessful, call it again.
+          if (dbCount === 0) {
+            getDbCount();
+          }
+          // If the dbCount has been set and the next request would request data that doesn't exist in the db, reset batchRequest to 0.
+          if ((batchRequest + 1) * 10 > dbCount && dbCount !== 0) {
             setBatchRequest(0);
           } else {
             setBatchRequest(batchRequest + 1);
           }
+        })
+        .catch((err) => {
+          console.log(err);
+          setUnreadStories(storiesData);
         });
     }
   }, [unreadStories]);
@@ -300,5 +326,6 @@ export default function useStoryTyper() {
     gameOverModalClosed,
     playerShouldLevelUp,
     handleToggleModal,
+    storiesAreLoaded,
   ];
 }

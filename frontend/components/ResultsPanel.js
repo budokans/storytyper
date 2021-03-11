@@ -22,6 +22,7 @@ function ResultsPanel(props) {
     level,
     gameOverModalClosed,
     playerShouldLevelUp,
+    storiesAreLoaded,
   } = props;
 
   const { theme, toggleTheme } = useThemeContext();
@@ -68,6 +69,7 @@ function ResultsPanel(props) {
         onChangeStory={onChangeStory}
         isRunning={isRunning}
         gameIsOver={gameIsOver}
+        storiesAreLoaded={storiesAreLoaded}
       />
 
       <Button onClick={toggleTheme} buttonClass={themeButtonClasses}>
@@ -91,6 +93,7 @@ ResultsPanel.propTypes = {
   level: PropTypes.number.isRequired,
   gameOverModalClosed: PropTypes.bool.isRequired,
   playerShouldLevelUp: PropTypes.bool.isRequired,
+  storiesAreLoaded: PropTypes.bool.isRequired,
 };
 
 export default ResultsPanel;
