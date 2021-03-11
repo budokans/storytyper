@@ -8,6 +8,7 @@ function PlayAgainControls({
   onChangeStory,
   isRunning,
   gameIsOver,
+  storiesAreLoaded,
 }) {
   const { theme } = useThemeContext();
 
@@ -24,7 +25,7 @@ function PlayAgainControls({
       <Button
         onClick={onChangeStory}
         buttonClass={`side-panel__btn-controls  btn--go--${theme}-theme`}
-        disabled={isRunning ? true : false}
+        disabled={isRunning || !storiesAreLoaded ? true : false}
       >
         Next Story
       </Button>
@@ -38,6 +39,7 @@ PlayAgainControls.propTypes = {
   onChangeStory: PropTypes.func,
   isRunning: PropTypes.bool.isRequired,
   gameIsOver: PropTypes.bool.isRequired,
+  storiesAreLoaded: PropTypes.bool.isRequired,
 };
 
 export default PlayAgainControls;

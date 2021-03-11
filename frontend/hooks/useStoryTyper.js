@@ -24,7 +24,7 @@ export default function useStoryTyper() {
   const playerShouldLevelUp =
     timeLeftOver && level !== difficulties.length - 1 ? true : false;
   const [batchRequest, setBatchRequest] = useState(0);
-  const [isMounted, setIsMounted] = useState(false);
+  const [storiesAreLoaded, setStoriesAreLoaded] = useState(false);
   const [dbCount, setDbCount] = useState(0);
 
   async function getDbData(url) {
@@ -35,18 +35,18 @@ export default function useStoryTyper() {
 
   // Gets the stories array from db and saves it to state on initial render
   useEffect(() => {
-    getDbData(`https://storytyper.herokuapp.com/data?batch=${batchRequest}`)
+    getDbData(`https://storytyper.herokuapp.co/data?batch=${batchRequest}`)
       .then((data) => {
         setUnreadStories(data);
         setBatchRequest(batchRequest + 1);
-        setIsMounted(true);
+        setStoriesAreLoaded(true);
         console.log("Success: stories received from db");
       })
       .catch((err) => {
         setUnreadStories(storiesData);
-        setIsMounted(true);
+        setStoriesAreLoaded(true);
         console.log(err);
-        console.log("Warning: db unavaible - local stories data used");
+        console.log("Warning: db unavailable - local stories data used");
       });
   }, []);
 
@@ -75,7 +75,7 @@ export default function useStoryTyper() {
 
   useEffect(() => {
     getFreshCurrentStory();
-  }, [isMounted]);
+  }, [storiesAreLoaded]);
 
   // Remove the completed story from unreadStories
   function updateUnreadStories() {
@@ -326,5 +326,6 @@ export default function useStoryTyper() {
     gameOverModalClosed,
     playerShouldLevelUp,
     handleToggleModal,
+    storiesAreLoaded,
   ];
 }

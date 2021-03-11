@@ -39,6 +39,7 @@ export default function Home() {
     gameOverModalClosed,
     playerShouldLevelUp,
     handleToggleModal,
+    storiesAreLoaded,
   ] = useStoryTyper();
 
   const { theme } = useThemeContext();
@@ -122,6 +123,7 @@ export default function Home() {
           level={level}
           gameOverModalClosed={gameOverModalClosed}
           playerShouldLevelUp={playerShouldLevelUp}
+          storiesAreLoaded={storiesAreLoaded}
         />
 
         <Modal
