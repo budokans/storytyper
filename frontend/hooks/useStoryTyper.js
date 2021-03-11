@@ -27,17 +27,15 @@ export default function useStoryTyper() {
   const [isMounted, setIsMounted] = useState(false);
   const [dbCount, setDbCount] = useState(0);
 
-  async function getStoriesData() {
-    const res = await fetch(
-      `https://storytyper.herokuapp.co/data?batch=${batchRequest}`
-    );
+  async function getDbData(url) {
+    const res = await fetch(url);
     const data = await res.json();
     return data;
   }
 
   // Gets the stories array from db and saves it to state on initial render
   useEffect(() => {
-    getStoriesData()
+    getDbData(`https://storytyper.herokuapp.com/data?batch=${batchRequest}`)
       .then((data) => {
         setUnreadStories(data);
         setBatchRequest(batchRequest + 1);
@@ -52,17 +50,19 @@ export default function useStoryTyper() {
       });
   }, []);
 
-  console.log(unreadStories);
+  // console.log(unreadStories);
 
   // Find the number of stories available in the database and save to state.
   useEffect(() => {
-    fetch("https://storytyper.herokuapp.com/count")
-      .then((res) => res.json())
+    getDbData("https://storytyper.herokuapp.com/count")
       .then((data) => {
         setDbCount(data.count);
         console.log("Success: count received from db");
       })
-      .catch(console.log("Can't find the dbCount"));
+      .catch((err) => {
+        console.log(err);
+        console.log("Can't find the dbCount");
+      });
   }, []);
 
   // Set a story picked randomly unreadStories to currentStory
