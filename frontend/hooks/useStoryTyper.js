@@ -35,7 +35,7 @@ export default function useStoryTyper() {
 
   // Gets the stories array from db and saves it to state on initial render
   useEffect(() => {
-    getDbData(`https://storytyper.herokuapp.co/data?batch=${batchRequest}`)
+    getDbData(`https://storytyper.herokuapp.com/data?batch=${batchRequest}`)
       .then((data) => {
         setUnreadStories(data);
         setBatchRequest(batchRequest + 1);
