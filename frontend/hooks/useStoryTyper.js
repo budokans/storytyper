@@ -35,7 +35,7 @@ export default function useStoryTyper() {
 
   // Gets the stories array from db and saves it to state on initial render
   useEffect(() => {
-    getDbData(`https://storytyper.herokuapp.com/data?batch=${batchRequest}`)
+    getDbData(`https://storytyper.herokuapp.co/data?batch=${batchRequest}`)
       .then((data) => {
         setUnreadStories(data);
         setBatchRequest(batchRequest + 1);
@@ -50,7 +50,7 @@ export default function useStoryTyper() {
       });
   }, []);
 
-  // console.log(unreadStories);
+  console.log(unreadStories);
 
   // Find the number of stories available in the database and save to state.
   useEffect(() => {
@@ -83,21 +83,24 @@ export default function useStoryTyper() {
     setUnreadStories(updatedUnreadStories);
   }
 
-  // If unreadStories is getting low, more stories will be requested from the server. If there are no more documents in the db, go back to requesting the first batch
-  // useEffect(() => {
-  //   if (unreadStories.length === 5) {
-  //     fetch(`https://storytyper.herokuapp.com/data?batch=${batchRequest}`)
-  //       .then((res) => res.json())
-  //       .then((data) => {
-  //         setUnreadStories(unreadStories.concat(data));
-  //         if ((batchRequest + 1) * 10 > dbCount) {
-  //           setBatchRequest(0);
-  //         } else {
-  //           setBatchRequest(batchRequest + 1);
-  //         }
-  //       });
-  //   }
-  // }, [unreadStories]);
+  // If unreadStories is getting low, more stories will be requested from the server or, if it fails, the local storiesData. If there are no more documents in the db, go back to requesting the first batch.
+  useEffect(() => {
+    if (unreadStories.length === 5) {
+      getDbData(`https://storytyper.herokuapp.co/data?batch=${batchRequest}`)
+        .then((data) => {
+          setUnreadStories(unreadStories.concat(data));
+          if ((batchRequest + 1) * 10 > dbCount) {
+            setBatchRequest(0);
+          } else {
+            setBatchRequest(batchRequest + 1);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          setUnreadStories(storiesData);
+        });
+    }
+  }, [unreadStories]);
 
   function startGame() {
     !isRunning && !gameIsOver && currentStory && setIsRunning(true);
