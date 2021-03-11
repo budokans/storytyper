@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import difficulties from "../difficulties.json";
+import storiesData from "../public/storiesData.json";
 
 export default function useStoryTyper() {
   const [unreadStories, setUnreadStories] = useState([]);
@@ -26,19 +27,34 @@ export default function useStoryTyper() {
   const [isMounted, setIsMounted] = useState(false);
   const [dbCount, setDbCount] = useState(0);
 
+  async function getStoriesData() {
+    const res = await fetch(
+      `https://storytyper.herokuapp.co/data?batch=${batchRequest}`
+    );
+    const data = await res.json();
+    return data;
+  }
+
   // Gets the stories array from db and saves it to state on initial render
   useEffect(() => {
-    fetch(`https://storytyper.herokuapp.com/data?batch=${batchRequest}`)
-      .then((res) => res.json())
+    getStoriesData()
       .then((data) => {
         setUnreadStories(data);
-        setIsMounted(true);
         setBatchRequest(batchRequest + 1);
+        setIsMounted(true);
         console.log("Success: stories received from db");
       })
-      .catch(console.log("Can't get stories from db"));
+      .catch((err) => {
+        setUnreadStories(storiesData);
+        setIsMounted(true);
+        console.log(err);
+        console.log("Warning: db unavaible - local stories data used");
+      });
   }, []);
 
+  console.log(unreadStories);
+
+  // Find the number of stories available in the database and save to state.
   useEffect(() => {
     fetch("https://storytyper.herokuapp.com/count")
       .then((res) => res.json())
@@ -68,20 +84,20 @@ export default function useStoryTyper() {
   }
 
   // If unreadStories is getting low, more stories will be requested from the server. If there are no more documents in the db, go back to requesting the first batch
-  useEffect(() => {
-    if (unreadStories.length === 5) {
-      fetch(`https://storytyper.herokuapp.com/data?batch=${batchRequest}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setUnreadStories(unreadStories.concat(data));
-          if ((batchRequest + 1) * 10 > dbCount) {
-            setBatchRequest(0);
-          } else {
-            setBatchRequest(batchRequest + 1);
-          }
-        });
-    }
-  }, [unreadStories]);
+  // useEffect(() => {
+  //   if (unreadStories.length === 5) {
+  //     fetch(`https://storytyper.herokuapp.com/data?batch=${batchRequest}`)
+  //       .then((res) => res.json())
+  //       .then((data) => {
+  //         setUnreadStories(unreadStories.concat(data));
+  //         if ((batchRequest + 1) * 10 > dbCount) {
+  //           setBatchRequest(0);
+  //         } else {
+  //           setBatchRequest(batchRequest + 1);
+  //         }
+  //       });
+  //   }
+  // }, [unreadStories]);
 
   function startGame() {
     !isRunning && !gameIsOver && currentStory && setIsRunning(true);
