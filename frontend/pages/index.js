@@ -67,10 +67,6 @@ export default function Home() {
           href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css"
           rel="stylesheet"
         />
-        <link
-          href="https://fonts.googleapis.com/css?family=Press+Start+2P"
-          rel="stylesheet"
-        />
       </Head>
       <header className={`main-header  main-header--${theme}-theme`}>
         <h1 className="main-header__title">Story Typer</h1>
