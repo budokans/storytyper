@@ -35,7 +35,7 @@ export default function useStoryTyper() {
 
   // Gets the stories array from db and saves it to state on initial render
   useEffect(() => {
-    getDbData(`https://storytyper.herokuapp.co/data?batch=${batchRequest}`)
+    getDbData(`https://storytyper.herokuapp.com/data?batch=${batchRequest}`)
       .then((data) => {
         setUnreadStories(data);
         setBatchRequest(batchRequest + 1);
@@ -50,10 +50,7 @@ export default function useStoryTyper() {
       });
   }, []);
 
-  console.log(unreadStories);
-
-  // Find the number of stories available in the database and save to state.
-  useEffect(() => {
+  function getDbCount() {
     getDbData("https://storytyper.herokuapp.com/count")
       .then((data) => {
         setDbCount(data.count);
@@ -63,6 +60,11 @@ export default function useStoryTyper() {
         console.log(err);
         console.log("Can't find the dbCount");
       });
+  }
+
+  // Find the number of stories available in the database and save to state.
+  useEffect(() => {
+    getDbCount();
   }, []);
 
   // Set a story picked randomly unreadStories to currentStory
@@ -86,10 +88,15 @@ export default function useStoryTyper() {
   // If unreadStories is getting low, more stories will be requested from the server or, if it fails, the local storiesData. If there are no more documents in the db, go back to requesting the first batch.
   useEffect(() => {
     if (unreadStories.length === 5) {
-      getDbData(`https://storytyper.herokuapp.co/data?batch=${batchRequest}`)
+      getDbData(`https://storytyper.herokuapp.com/data?batch=${batchRequest}`)
         .then((data) => {
           setUnreadStories(unreadStories.concat(data));
-          if ((batchRequest + 1) * 10 > dbCount) {
+          // If initial render getDbCount call was unsuccessful, call it again.
+          if (dbCount === 0) {
+            getDbCount();
+          }
+          // If the dbCount has been set and the next request would request data that doesn't exist in the db, reset batchRequest to 0.
+          if ((batchRequest + 1) * 10 > dbCount && dbCount !== 0) {
             setBatchRequest(0);
           } else {
             setBatchRequest(batchRequest + 1);
