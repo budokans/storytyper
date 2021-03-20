@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useThemeContext } from "../context/themeContext";
 import useModalToggler from "../hooks/useModalToggler";
 import PropTypes from "prop-types";
@@ -37,7 +37,11 @@ function StoryBox({ currentStory, gameIsOver }) {
   });
 
   function addClassToBio() {
-    return currentStory.bio.replace(/<a/g, '<a class="out-link"');
+    const classAdded = currentStory.bio.replace(/<a/g, '<a class="out-link"');
+    const finalBioHTML = /opener/.test(classAdded)
+      ? classAdded.replace(/opener/, "referrer")
+      : classAdded.replace(/<a/, '<a rel="noreferrer"');
+    return finalBioHTML;
   }
 
   return (
@@ -83,7 +87,7 @@ function StoryBox({ currentStory, gameIsOver }) {
               className="out-link"
               href={currentStory.url}
               target="_blank"
-              rel="noopener"
+              rel="noreferrer"
             >
               50-Word Stories.
             </a>
