@@ -43,7 +43,7 @@ function Difficulty(props) {
       <Button
         onClick={handleToggleModal}
         buttonClass={`side-panel__btn-modal  side-panel__btn-modal--${theme}-theme`}
-        // disabled={isRunning}
+        disabled={isRunning}
       >
         i
       </Button>
