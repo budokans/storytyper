@@ -209,7 +209,7 @@ body {
 
 .mobile-container__message {
   color: var(--text-main-light);
-  font-size: 0.6em;
+  font-size: 0.75em;
   align-self: flex-start;
   margin: 24px 0 0;
   line-height: 2;

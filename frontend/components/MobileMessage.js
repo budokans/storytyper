@@ -6,6 +6,7 @@ export default function MobileMessage() {
       <Header />
       <div className="mobile-container">
         <i className="ri-error-warning-fill"></i>
+
         <p className="mobile-container__message">
           Nooo! You're using a device with a screen too small to play Story
           Typer, the game that improves your typing speed while you read cool
