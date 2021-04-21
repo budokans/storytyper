@@ -44,7 +44,6 @@ export default function useStoryTyper() {
       })
       .catch((err) => {
         setUnreadStories(storiesData);
-        setStoriesAreLoaded(true);
         console.log(err);
         console.log("Warning: db unavailable - local stories data used");
       });
