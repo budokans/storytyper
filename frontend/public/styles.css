@@ -8,6 +8,7 @@
  * Variables............Custom color properties
  * Base.................Body element styles
  * Header...............Header and subtext styles
+ * Mobile Container.....Styles for mobile message
  * Game Container.......Outer wrapper all game-related components
  * Gameplay Container...Wrapper of left column - the gameplay components
  * Gameplay Boxes.......The two main gameplay components
@@ -184,6 +185,36 @@ body {
   }
 }
 
+
+
+
+
+/*------------------------------------*\
+  #MOBILE CONTAINER
+\*------------------------------------*/
+
+.mobile-container {
+  margin-top: 24px;
+  border-top: 5px solid var(--text-main-light);
+  padding-top: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ri-error-warning-fill {
+  color: var(--text-rich);
+  justify-self: center;
+  font-size: 48px;
+}
+
+.mobile-container__message {
+  color: var(--text-main-light);
+  font-size: 0.6em;
+  align-self: flex-start;
+  margin: 24px 0 0;
+  line-height: 2;
+  text-align: left;
+}
 
 
 

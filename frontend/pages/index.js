@@ -1,6 +1,7 @@
 import React from "react";
 import Head from "next/head";
 import Game from "../components/Game";
+import MobileMessage from "../components/MobileMessage";
 
 export default function Home() {
   const windowWidth = window.innerWidth;
@@ -21,7 +22,7 @@ export default function Home() {
         />
       </Head>
 
-      {windowWidth > 876 ? <Game /> : <p>Too small</p>}
+      {windowWidth > 876 ? <Game /> : <MobileMessage />}
     </>
   );
 }

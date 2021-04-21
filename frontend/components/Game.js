@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import classNames from "classnames";
+import Header from "./Header";
 import StoryBox from "../components/StoryBox";
 import CountdownDisplay from "../components/CountdownDisplay";
 import TypingBox from "../components/TypingBox";
@@ -11,7 +12,6 @@ import difficulties from "../difficulties.json";
 // Hooks & Context
 import useStoryTyper from "../hooks/useStoryTyper";
 import { useThemeContext } from "../context/themeContext";
-import Header from "./Header";
 
 export default function Home() {
   const [
