@@ -11,6 +11,7 @@ import difficulties from "../difficulties.json";
 // Hooks & Context
 import useStoryTyper from "../hooks/useStoryTyper";
 import { useThemeContext } from "../context/themeContext";
+import Header from "./Header";
 
 export default function Home() {
   const [
@@ -57,92 +58,104 @@ export default function Home() {
   });
 
   return (
-    <div className="game-container">
-      <section className="gameplay-container">
-        <StoryBox currentStory={currentStory} gameIsOver={gameIsOver} />
+    <>
+      <Header>
+        <p className="main-header__subtext">
+          Improve your typing speed while reading cool 50-word stories!
+        </p>
 
-        <TypingBox
-          countdown={countdown}
-          text={text}
-          onTextChange={handleTextChange}
+        <p className="main-header__subtext">
+          Beat the clock to reach the next difficulty level!
+        </p>
+      </Header>
+
+      <div className="game-container">
+        <section className="gameplay-container">
+          <StoryBox currentStory={currentStory} gameIsOver={gameIsOver} />
+
+          <TypingBox
+            countdown={countdown}
+            text={text}
+            onTextChange={handleTextChange}
+            isRunning={isRunning}
+            textareaRef={textareaRef}
+            startGame={startGame}
+            gameIsOver={gameIsOver}
+            wordCount={wordCount}
+            errorPresent={errorPresent}
+            theme={theme}
+          />
+
+          <CountdownDisplay countdown={countdown} isRunning={isRunning} />
+
+          <GameTimeDisplay
+            gameTimeRemaining={gameTimeRemaining}
+            timeLeftOver={timeLeftOver}
+          />
+        </section>
+
+        <ResultsPanel
+          onChangeStory={handleNextStoryClick}
+          onRestartClick={handleRestartClick}
+          onPlayAgainClick={handlePlayAgainClick}
+          highScore={highScore}
+          wpm={wpm}
+          cpm={cpm}
+          efficiency={efficiency}
+          inefficientKeyStrokesCount={inefficientKeyStrokesCount}
           isRunning={isRunning}
-          textareaRef={textareaRef}
-          startGame={startGame}
           gameIsOver={gameIsOver}
-          wordCount={wordCount}
-          errorPresent={errorPresent}
-          theme={theme}
+          level={level}
+          gameOverModalClosed={gameOverModalClosed}
+          playerShouldLevelUp={playerShouldLevelUp}
+          storiesAreLoaded={storiesAreLoaded}
         />
 
-        <CountdownDisplay countdown={countdown} isRunning={isRunning} />
-
-        <GameTimeDisplay
-          gameTimeRemaining={gameTimeRemaining}
-          timeLeftOver={timeLeftOver}
-        />
-      </section>
-
-      <ResultsPanel
-        onChangeStory={handleNextStoryClick}
-        onRestartClick={handleRestartClick}
-        onPlayAgainClick={handlePlayAgainClick}
-        highScore={highScore}
-        wpm={wpm}
-        cpm={cpm}
-        efficiency={efficiency}
-        inefficientKeyStrokesCount={inefficientKeyStrokesCount}
-        isRunning={isRunning}
-        gameIsOver={gameIsOver}
-        level={level}
-        gameOverModalClosed={gameOverModalClosed}
-        playerShouldLevelUp={playerShouldLevelUp}
-        storiesAreLoaded={storiesAreLoaded}
-      />
-
-      <Modal
-        onToggleModal={handleToggleModal}
-        modalIsShowing={gameIsOver && !gameOverModalClosed ? true : false}
-        modalBodyIsTransparent={true}
-        modalBodyClass={gameOverModalClass}
-      >
-        <header
-          className={`modal__header--xl  span-grid-width  ${
-            timeLeftOver ? "rich" : ""
-          }`}
+        <Modal
+          onToggleModal={handleToggleModal}
+          modalIsShowing={gameIsOver && !gameOverModalClosed ? true : false}
+          modalBodyIsTransparent={true}
+          modalBodyClass={gameOverModalClass}
         >
-          {timeLeftOver ? "Congratulations" : "Bad luck"}
-        </header>
+          <header
+            className={`modal__header--xl  span-grid-width  ${
+              timeLeftOver ? "rich" : ""
+            }`}
+          >
+            {timeLeftOver ? "Congratulations" : "Bad luck"}
+          </header>
 
-        <h2 className="modal__subheader  span-grid-width">
-          {timeLeftOver
-            ? `You beat the clock by ${timeLeftOver} seconds!`
-            : "You were beaten by the clock!"}
-        </h2>
-
-        {gameTimeRemaining === 0 && wpm > highScore && (
-          <h2 className="modal__subheader  span-grid-width">But...</h2>
-        )}
-
-        <h2
-          className={`modal__subheader  span-grid-width  ${
-            wpm > highScore ? "rich" : ""
-          }`}
-        >
-          {wpm > highScore
-            ? `*** New High Score: ${wpm} wpm ***`
-            : `*** Speed: ${wpm} wpm ***`}
-        </h2>
-
-        {playerShouldLevelUp && (
-          <h2 className="modal__subheader  span-grid-width  rich">
-            *** You leveled up to{" "}
-            <strong className={difficulties[level + 1].class}>
-              {difficulties[level + 1].name}
-            </strong>{" "}
-            ***
+          <h2 className="modal__subheader  span-grid-width">
+            {timeLeftOver
+              ? `You beat the clock by ${timeLeftOver} seconds!`
+              : "You were beaten by the clock!"}
           </h2>
-        )}
-      </Modal>
-    </div>
+
+          {gameTimeRemaining === 0 && wpm > highScore && (
+            <h2 className="modal__subheader  span-grid-width">But...</h2>
+          )}
+
+          <h2
+            className={`modal__subheader  span-grid-width  ${
+              wpm > highScore ? "rich" : ""
+            }`}
+          >
+            {wpm > highScore
+              ? `*** New High Score: ${wpm} wpm ***`
+              : `*** Speed: ${wpm} wpm ***`}
+          </h2>
+
+          {playerShouldLevelUp && (
+            <h2 className="modal__subheader  span-grid-width  rich">
+              *** You leveled up to{" "}
+              <strong className={difficulties[level + 1].class}>
+                {difficulties[level + 1].name}
+              </strong>{" "}
+              ***
+            </h2>
+          )}
+        </Modal>
+      </div>
+    </>
   );
 }

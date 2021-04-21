@@ -1,6 +1,5 @@
 import React from "react";
 import Head from "next/head";
-import Header from "../components/Header";
 import Game from "../components/Game";
 
 export default function Home() {
@@ -21,8 +20,6 @@ export default function Home() {
           content="A desktop speed-typing game based around fifty-word stories written by authors from all walks of life."
         />
       </Head>
-
-      <Header />
 
       {windowWidth > 876 ? <Game /> : <p>Too small</p>}
     </>

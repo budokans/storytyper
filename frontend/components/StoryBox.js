@@ -58,7 +58,7 @@ function StoryBox({ currentStory, gameIsOver }) {
         !currentStory ? (
           <Loader
             type="Circles"
-            color="#00db00"
+            color="#00FF00"
             height={80}
             width={80}
             timeout={3000}
