@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
-import Loader from "react-loader-spinner";
 import PropTypes from "prop-types";
 import parse from "html-react-parser";
 import classNames from "classnames";
-import { useThemeContext } from "../context/themeContext";
 import useModalToggler from "../hooks/useModalToggler";
 import Button from "./Button";
 import Modal from "./Modal";
 
-function StoryBox({ currentStory, gameIsOver }) {
+export default function StoryBox({ currentStory, gameIsOver }) {
   const [modalIsShowing, handleToggleModal] = useModalToggler();
   const [formattedIsShowing, setFormattedIsShowing] = useState(false);
 
@@ -21,15 +19,6 @@ function StoryBox({ currentStory, gameIsOver }) {
   useEffect(() => {
     setFormattedIsShowing(false);
   }, [currentStory]);
-
-  const { theme } = useThemeContext();
-
-  const wrapperClass = classNames({
-    "gameplay-box": true,
-    "gameplay-box--story": true,
-    "gameplay-box--expanded": gameIsOver,
-    [`gameplay-box--story--${theme}-theme`]: true,
-  });
 
   const formattingButtonClass = classNames({
     btn: true,
@@ -46,8 +35,8 @@ function StoryBox({ currentStory, gameIsOver }) {
   }
 
   return (
-    <div className={wrapperClass}>
-      {currentStory && gameIsOver && (
+    <>
+      {gameIsOver && (
         <header className="gameplay-box--story__header">
           <strong>{currentStory.title}</strong> by {currentStory.author}
         </header>
@@ -55,16 +44,7 @@ function StoryBox({ currentStory, gameIsOver }) {
 
       {
         // Show text with original formatting if the Original Formatting button has been clicked, otherwise show the condensed version for gameplay.
-        !currentStory ? (
-          <Loader
-            type="Circles"
-            color="#00FF00"
-            height={80}
-            width={80}
-            timeout={3000}
-            className="gameplay-box--story__spinner"
-          />
-        ) : !formattedIsShowing ? (
+        !formattedIsShowing ? (
           <p className="gameplay-box--story__text">{currentStory.storyText}</p>
         ) : (
           <div className="gameplay-box--story__text">
@@ -97,27 +77,25 @@ function StoryBox({ currentStory, gameIsOver }) {
               target="_blank"
               rel="noreferrer"
             >
-              50-Word Stories.
+              fiftywordstories.com
             </a>
           </p>
         </>
       )}
 
-      {currentStory && (
-        <Modal
-          modalIsShowing={modalIsShowing}
-          onToggleModal={handleToggleModal}
-          modalBodyClass="modal__body--story"
-        >
-          <header className="modal__header">
-            <h2>{currentStory.author}</h2>
-          </header>
-          <p className="span-grid-width">
-            {currentStory.bio && parse(addClassToBio())}
-          </p>
-        </Modal>
-      )}
-    </div>
+      <Modal
+        modalIsShowing={modalIsShowing}
+        onToggleModal={handleToggleModal}
+        modalBodyClass="modal__body--story"
+      >
+        <header className="modal__header">
+          <h2>{currentStory.author}</h2>
+        </header>
+        <p className="span-grid-width">
+          {currentStory.bio && parse(addClassToBio())}
+        </p>
+      </Modal>
+    </>
   );
 }
 
@@ -125,5 +103,3 @@ StoryBox.propTypes = {
   currentStory: PropTypes.object,
   gameIsOver: PropTypes.bool.isRequired,
 };
-
-export default StoryBox;

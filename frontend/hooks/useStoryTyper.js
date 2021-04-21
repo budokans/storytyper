@@ -40,12 +40,10 @@ export default function useStoryTyper() {
         setUnreadStories(data);
         setBatchRequest(batchRequest + 1);
         setStoriesAreLoaded(true);
-        console.log("Success: stories received from db");
       })
       .catch((err) => {
         setUnreadStories(storiesData);
         console.log(err);
-        console.log("Warning: db unavailable - local stories data used");
       });
   }, []);
 
@@ -53,11 +51,9 @@ export default function useStoryTyper() {
     getDbData("https://storytyper.herokuapp.com/count")
       .then((data) => {
         setDbCount(data.count);
-        console.log("Success: count received from db");
       })
       .catch((err) => {
         console.log(err);
-        console.log("Can't find the dbCount");
       });
   }
 
