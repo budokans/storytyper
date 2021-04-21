@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import classNames from "classnames";
 import Head from "next/head";
+import Header from "../components/Header";
 import StoryBox from "../components/StoryBox";
 import CountdownDisplay from "../components/CountdownDisplay";
 import TypingBox from "../components/TypingBox";
@@ -72,17 +73,7 @@ export default function Home() {
           content="A desktop speed-typing game based around fifty-word stories written by authors from all walks of life."
         />
       </Head>
-      <header className={`main-header  main-header--${theme}-theme`}>
-        <h1 className="main-header__title">Story Typer</h1>
-
-        <p className="main-header__subtext">
-          Improve your typing speed while reading cool 50-word stories!
-        </p>
-
-        <p className="main-header__subtext">
-          Beat the clock to reach the next difficulty level!
-        </p>
-      </header>
+      <Header />
 
       <div className="game-container">
         <section className="gameplay-container">
