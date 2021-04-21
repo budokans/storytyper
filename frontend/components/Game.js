@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import classNames from "classnames";
 import Header from "./Header";
-import StoryBox from "../components/StoryBox";
 import CountdownDisplay from "../components/CountdownDisplay";
 import TypingBox from "../components/TypingBox";
 import GameTimeDisplay from "../components/GameTimeDisplay";
@@ -12,6 +11,7 @@ import difficulties from "../difficulties.json";
 // Hooks & Context
 import useStoryTyper from "../hooks/useStoryTyper";
 import { useThemeContext } from "../context/themeContext";
+import StoryBoxContainer from "../containers/StoryBox";
 
 export default function Home() {
   const [
@@ -71,7 +71,10 @@ export default function Home() {
 
       <div className="game-container">
         <section className="gameplay-container">
-          <StoryBox currentStory={currentStory} gameIsOver={gameIsOver} />
+          <StoryBoxContainer
+            currentStory={currentStory}
+            gameIsOver={gameIsOver}
+          />
 
           <TypingBox
             countdown={countdown}
