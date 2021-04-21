@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import axios from "axios";
 import difficulties from "../difficulties.json";
 import storiesData from "../public/storiesData.json";
 
@@ -28,8 +29,7 @@ export default function useStoryTyper() {
   const [dbCount, setDbCount] = useState(0);
 
   async function getDbData(url) {
-    const res = await fetch(url);
-    const data = await res.json();
+    const { data } = await axios.get(url);
     return data;
   }
 
@@ -44,7 +44,6 @@ export default function useStoryTyper() {
       })
       .catch((err) => {
         setUnreadStories(storiesData);
-        setStoriesAreLoaded(true);
         console.log(err);
         console.log("Warning: db unavailable - local stories data used");
       });

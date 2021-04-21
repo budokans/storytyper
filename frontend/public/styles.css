@@ -8,6 +8,7 @@
  * Variables............Custom color properties
  * Base.................Body element styles
  * Header...............Header and subtext styles
+ * Mobile Container.....Styles for mobile message
  * Game Container.......Outer wrapper all game-related components
  * Gameplay Container...Wrapper of left column - the gameplay components
  * Gameplay Boxes.......The two main gameplay components
@@ -37,6 +38,7 @@
        url('./fonts/PressStart2P-Regular.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 
@@ -173,6 +175,46 @@ body {
   color: var(--text-main-dark)
 }
 
+@media (max-width: 600px) {
+  .main-header__title { 
+    font-size: 2em;
+  }
+
+  .main-header__subtext {
+      font-size: 0.65em;
+  }
+}
+
+
+
+
+
+/*------------------------------------*\
+  #MOBILE CONTAINER
+\*------------------------------------*/
+
+.mobile-container {
+  margin-top: 24px;
+  border-top: 5px solid var(--text-main-light);
+  padding-top: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ri-error-warning-fill {
+  color: var(--text-rich);
+  justify-self: center;
+  font-size: 48px;
+}
+
+.mobile-container__message {
+  color: var(--text-main-light);
+  font-size: 0.6em;
+  align-self: flex-start;
+  margin: 24px 0 0;
+  line-height: 2;
+  text-align: left;
+}
 
 
 
@@ -235,6 +277,7 @@ body {
   overflow: hidden;
   display: grid;
   grid-template-columns: 50% 50%;
+  position: relative;
 }
 
 .gameplay-box--story--dark-theme {
@@ -251,9 +294,10 @@ body {
   max-height: 90em;
 }
 
-  .gameplay-box--story__message {
-    grid-column: 1 / -1;
-    color: var(--text-inert);
+  .gameplay-box--story__spinner {
+    position: absolute;
+    left: calc(50% - 40px);
+    top: calc(50% - 40px);
   }
 
   .gameplay-box--story__header {

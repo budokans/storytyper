@@ -2,6 +2,7 @@ import { ThemeContextProvider } from "../context/themeContext";
 import PropTypes from "prop-types";
 import ClientOnly from "../components/ClientOnly";
 import "../public/styles.css";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 function App({ Component, pageProps }) {
   return (
