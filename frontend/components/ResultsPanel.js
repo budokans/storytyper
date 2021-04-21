@@ -46,6 +46,7 @@ function ResultsPanel(props) {
         gameOverModalClosed={gameOverModalClosed}
         playerShouldLevelUp={playerShouldLevelUp}
         gameIsOver={gameIsOver}
+        isRunning={isRunning}
       />
 
       <HighScore
