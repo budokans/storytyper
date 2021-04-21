@@ -62,10 +62,14 @@ export default function Home() {
       <Head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Speed Typer v1.0</title>
+        <title>Speed Typer</title>
         <link
           href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css"
           rel="stylesheet"
+        />
+        <meta
+          name="description"
+          content="A desktop speed-typing game based around fifty-word stories written by authors from all walks of life."
         />
       </Head>
       <header className={`main-header  main-header--${theme}-theme`}>
