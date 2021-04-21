@@ -4,6 +4,8 @@ import Header from "../components/Header";
 import Game from "../components/Game";
 
 export default function Home() {
+  const windowWidth = window.innerWidth;
+
   return (
     <>
       <Head>
@@ -22,7 +24,7 @@ export default function Home() {
 
       <Header />
 
-      <Game />
+      {windowWidth > 876 ? <Game /> : <p>Too small</p>}
     </>
   );
 }
