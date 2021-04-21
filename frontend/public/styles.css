@@ -236,6 +236,7 @@ body {
   overflow: hidden;
   display: grid;
   grid-template-columns: 50% 50%;
+  position: relative;
 }
 
 .gameplay-box--story--dark-theme {
@@ -255,6 +256,12 @@ body {
   .gameplay-box--story__message {
     grid-column: 1 / -1;
     color: var(--text-inert);
+  }
+
+  .gameplay-box--story__spinner {
+    position: absolute;
+    left: calc(50% - 40px);
+    top: calc(50% - 40px);
   }
 
   .gameplay-box--story__header {

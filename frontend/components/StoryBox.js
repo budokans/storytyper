@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useThemeContext } from "../context/themeContext";
-import useModalToggler from "../hooks/useModalToggler";
+import Loader from "react-loader-spinner";
 import PropTypes from "prop-types";
 import parse from "html-react-parser";
 import classNames from "classnames";
+import { useThemeContext } from "../context/themeContext";
+import useModalToggler from "../hooks/useModalToggler";
 import Button from "./Button";
 import Modal from "./Modal";
 
@@ -55,7 +56,14 @@ function StoryBox({ currentStory, gameIsOver }) {
       {
         // Show text with original formatting if the Original Formatting button has been clicked, otherwise show the condensed version for gameplay.
         !currentStory ? (
-          <h2 className="gameplay-box--story__message">Loading Stories...</h2>
+          <Loader
+            type="Circles"
+            color="#00db00"
+            height={80}
+            width={80}
+            timeout={3000}
+            className="gameplay-box--story__spinner"
+          />
         ) : !formattedIsShowing ? (
           <p className="gameplay-box--story__text">{currentStory.storyText}</p>
         ) : (
