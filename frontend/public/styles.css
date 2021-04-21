@@ -174,6 +174,16 @@ body {
   color: var(--text-main-dark)
 }
 
+@media (max-width: 600px) {
+  .main-header__title { 
+    font-size: 2em;
+  }
+
+  .main-header__subtext {
+      font-size: 0.65em;
+  }
+}
+
 
 
 
@@ -252,11 +262,6 @@ body {
 .gameplay-box--expanded { 
   max-height: 90em;
 }
-
-  .gameplay-box--story__message {
-    grid-column: 1 / -1;
-    color: var(--text-inert);
-  }
 
   .gameplay-box--story__spinner {
     position: absolute;
