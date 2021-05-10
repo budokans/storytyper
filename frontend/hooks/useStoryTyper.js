@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import difficulties from "../difficulties.json";
 import storiesData from "../public/storiesData.json";
+import { endpoint, prodEndpoint } from "../config";
 
 export default function useStoryTyper() {
   const [unreadStories, setUnreadStories] = useState([]);
@@ -33,9 +34,11 @@ export default function useStoryTyper() {
     return data;
   }
 
+  const url = process.env.NODE_ENV === "production" ? prodEndpoint : endpoint;
+
   // Gets the stories array from db and saves it to state on initial render
   useEffect(() => {
-    getDbData(`https://storytyper.herokuapp.com/data?batch=${batchRequest}`)
+    getDbData(`${url}/data?batch=${batchRequest}`)
       .then((data) => {
         setUnreadStories(data);
         setBatchRequest(batchRequest + 1);
@@ -48,7 +51,7 @@ export default function useStoryTyper() {
   }, []);
 
   function getDbCount() {
-    getDbData("https://storytyper.herokuapp.com/count")
+    getDbData(`${url}/count`)
       .then((data) => {
         setDbCount(data.count);
       })
