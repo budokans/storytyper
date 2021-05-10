@@ -563,7 +563,7 @@ a scrollbar */
 }
 
 .game-time-display--level-up {
-  animation-duration: 1s;
+  animation-duration: 0.5s;
   animation-name: flash;
 }
 
