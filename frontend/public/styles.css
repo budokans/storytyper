@@ -562,6 +562,20 @@ a scrollbar */
   text-align: right;
 }
 
+.game-time-display--level-up {
+  animation-duration: 1s;
+  animation-name: flash;
+}
+
+@keyframes flash {
+  from {
+    transform: translateX(-30px) translateY(30px) scale(1.3);
+  }
+  to {
+    transform: translateX(0) translateY(0) scale(1);
+  }
+}
+
 .game-time-display--dark-theme {
   color: var(--text-main-light);
 }

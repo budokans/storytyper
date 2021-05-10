@@ -94,6 +94,7 @@ export default function Home() {
           <GameTimeDisplay
             gameTimeRemaining={gameTimeRemaining}
             timeLeftOver={timeLeftOver}
+            level={level}
           />
         </section>
 

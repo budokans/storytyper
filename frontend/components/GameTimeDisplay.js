@@ -1,8 +1,9 @@
 import { useThemeContext } from "../context/themeContext";
+import difficulties from "../difficulties.json";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 
-function GameTimeRemaining({ gameTimeRemaining, timeLeftOver }) {
+function GameTimeRemaining({ gameTimeRemaining, timeLeftOver, level }) {
   const { theme } = useThemeContext();
 
   const gameTimeClass = classNames({
@@ -11,6 +12,8 @@ function GameTimeRemaining({ gameTimeRemaining, timeLeftOver }) {
     "game-time-display--critical":
       gameTimeRemaining < 6 && gameTimeRemaining > 0,
     "game-time-display--inert": gameTimeRemaining === 0 || timeLeftOver,
+    "game-time-display--level-up":
+      gameTimeRemaining === difficulties[level].seconds ? true : false,
   });
 
   return (
@@ -24,6 +27,7 @@ function GameTimeRemaining({ gameTimeRemaining, timeLeftOver }) {
 GameTimeRemaining.propTypes = {
   gameTimeRemaining: PropTypes.number.isRequired,
   timeLeftOver: PropTypes.number.isRequired,
+  level: PropTypes.number.isRequired,
 };
 
 export default GameTimeRemaining;
