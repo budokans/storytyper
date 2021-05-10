@@ -146,7 +146,7 @@ export default function useStoryTyper() {
       textareaRef.current.disabled = true;
       setIsRunning(false);
     }
-  });
+  }, [gameTimeRemaining]);
 
   // Stops game when the input matches the story
   useEffect(() => {

@@ -11,14 +11,16 @@ function Modal({
   children,
 }) {
   // Puts the modal body in focus so that onKeyDown will toggle the modal
-  let modalBodyRef = useRef(null);
+  const modalBodyRef = useRef(null);
   modalIsShowing && modalBodyRef.current.focus();
 
   // Closes modal if the user clicks outside of the .modal-body div
   function handleClickOutside(e) {
-    return modalBodyRef.current.contains(e.target)
-      ? undefined
-      : onToggleModal();
+    if (modalBodyRef.current.contains(e.target)) {
+      return;
+    } else {
+      onToggleModal();
+    }
   }
 
   const { theme } = useThemeContext();
