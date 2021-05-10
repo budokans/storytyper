@@ -346,7 +346,7 @@ a scrollbar */
 .gameplay-box--input {
   background: var(--text-inert-lighter);
   color: var(--text-dark);
-  height: 5.64em;
+  height: 5.65em;
   resize: none;
   outline: none;
   border: none;

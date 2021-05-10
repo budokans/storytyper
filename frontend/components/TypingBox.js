@@ -37,7 +37,7 @@ function TypingBox(props) {
   // Maintains the height 2px above the scrollHeight to prevent a scrollbar showing.
   function resizeTextarea() {
     textareaRef.current.style.height = `${
-      textareaRef.current.scrollHeight + 3
+      textareaRef.current.scrollHeight + 2
     }px`;
   }
 

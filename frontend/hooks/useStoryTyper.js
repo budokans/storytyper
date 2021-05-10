@@ -260,7 +260,7 @@ export default function useStoryTyper() {
     setErrorPresent(false);
     setInefficientKeyStrokesCount(0);
     setGameOverModalClosed(false);
-    textareaRef.current.style.height = "5.64em";
+    textareaRef.current.style.height = "5.65em";
   }
 
   // Resets the game if the player decides to click Reset in the middle of a game.
@@ -276,10 +276,14 @@ export default function useStoryTyper() {
   function handlePlayAgainClick() {
     basicReset();
     wpm > highScore && setHighScore(wpm);
-    playerShouldLevelUp && setLevel(level + 1);
-    playerShouldLevelUp
-      ? setGameTimeRemaining(difficulties[level + 1].seconds)
-      : setGameTimeRemaining(difficulties[level].seconds);
+
+    if (playerShouldLevelUp) {
+      setLevel(level + 1);
+      setGameTimeRemaining(difficulties[level + 1].seconds);
+    } else {
+      setGameTimeRemaining(difficulties[level].seconds);
+    }
+
     setTimeLeftOver(0);
   }
 
