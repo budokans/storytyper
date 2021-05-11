@@ -346,7 +346,7 @@ a scrollbar */
 .gameplay-box--input {
   background: var(--text-inert-lighter);
   color: var(--text-dark);
-  height: 5.64em;
+  height: 5.65em;
   resize: none;
   outline: none;
   border: none;
@@ -560,6 +560,20 @@ a scrollbar */
 .game-time-display {
   grid-column: 3;
   text-align: right;
+}
+
+.game-time-display--level-up {
+  animation-duration: 0.5s;
+  animation-name: flash;
+}
+
+@keyframes flash {
+  from {
+    transform: translateX(-30px) translateY(30px) scale(1.3);
+  }
+  to {
+    transform: translateX(0) translateY(0) scale(1);
+  }
 }
 
 .game-time-display--dark-theme {

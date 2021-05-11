@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import difficulties from "../difficulties.json";
 import storiesData from "../public/storiesData.json";
+import { endpoint, prodEndpoint } from "../config";
 
 export default function useStoryTyper() {
   const [unreadStories, setUnreadStories] = useState([]);
@@ -27,15 +28,18 @@ export default function useStoryTyper() {
   const [batchRequest, setBatchRequest] = useState(0);
   const [storiesAreLoaded, setStoriesAreLoaded] = useState(false);
   const [dbCount, setDbCount] = useState(0);
+  const [firstPlayOnNewLevel, setFirstPlayOnNewLevel] = useState(true);
 
   async function getDbData(url) {
     const { data } = await axios.get(url);
     return data;
   }
 
+  const url = process.env.NODE_ENV === "production" ? prodEndpoint : endpoint;
+
   // Gets the stories array from db and saves it to state on initial render
   useEffect(() => {
-    getDbData(`https://storytyper.herokuapp.com/data?batch=${batchRequest}`)
+    getDbData(`${url}/data?batch=${batchRequest}`)
       .then((data) => {
         setUnreadStories(data);
         setBatchRequest(batchRequest + 1);
@@ -48,7 +52,7 @@ export default function useStoryTyper() {
   }, []);
 
   function getDbCount() {
-    getDbData("https://storytyper.herokuapp.com/count")
+    getDbData(`${url}/count`)
       .then((data) => {
         setDbCount(data.count);
       })
@@ -106,6 +110,7 @@ export default function useStoryTyper() {
 
   function startGame() {
     !isRunning && !gameIsOver && currentStory && setIsRunning(true);
+    setFirstPlayOnNewLevel(false); // Removes the level-up class from timer
   }
 
   // Pass 'start on keypress' handler to onkeypress method when document has loaded
@@ -146,7 +151,7 @@ export default function useStoryTyper() {
       textareaRef.current.disabled = true;
       setIsRunning(false);
     }
-  });
+  }, [gameTimeRemaining]);
 
   // Stops game when the input matches the story
   useEffect(() => {
@@ -260,7 +265,7 @@ export default function useStoryTyper() {
     setErrorPresent(false);
     setInefficientKeyStrokesCount(0);
     setGameOverModalClosed(false);
-    textareaRef.current.style.height = "5.64em";
+    textareaRef.current.style.height = "5.65em";
   }
 
   // Resets the game if the player decides to click Reset in the middle of a game.
@@ -276,10 +281,16 @@ export default function useStoryTyper() {
   function handlePlayAgainClick() {
     basicReset();
     wpm > highScore && setHighScore(wpm);
-    playerShouldLevelUp && setLevel(level + 1);
-    playerShouldLevelUp
-      ? setGameTimeRemaining(difficulties[level + 1].seconds)
-      : setGameTimeRemaining(difficulties[level].seconds);
+
+    if (playerShouldLevelUp) {
+      setLevel(level + 1);
+      setGameTimeRemaining(difficulties[level + 1].seconds);
+      setFirstPlayOnNewLevel(true);
+    } else {
+      setGameTimeRemaining(difficulties[level].seconds);
+      setFirstPlayOnNewLevel(false);
+    }
+
     setTimeLeftOver(0);
   }
 
@@ -322,5 +333,6 @@ export default function useStoryTyper() {
     playerShouldLevelUp,
     handleToggleModal,
     storiesAreLoaded,
+    firstPlayOnNewLevel,
   ];
 }

@@ -40,6 +40,7 @@ export default function Home() {
     playerShouldLevelUp,
     handleToggleModal,
     storiesAreLoaded,
+    firstPlayOnNewLevel,
   ] = useStoryTyper();
 
   const { theme } = useThemeContext();
@@ -94,6 +95,7 @@ export default function Home() {
           <GameTimeDisplay
             gameTimeRemaining={gameTimeRemaining}
             timeLeftOver={timeLeftOver}
+            firstPlayOnNewLevel={firstPlayOnNewLevel}
           />
         </section>
 

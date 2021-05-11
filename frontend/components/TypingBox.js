@@ -60,7 +60,7 @@ function TypingBox(props) {
         placeholder={placeholderText()}
         onClick={startGame}
         onChange={handleTextChange}
-        onPaste={(e) => e.preventDefault()}
+        // onPaste={(e) => e.preventDefault()}
         value={text}
         ref={textareaRef}
         autoCapitalize="off"
