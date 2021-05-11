@@ -23,10 +23,15 @@ export default function formatStoryText(text) {
     .trim();
 
   // Replaces typographic characters with ASCII characters
-  return formattedText
-    .replace(/“/g, '"')
-    .replace(/”/g, '"')
-    .replace(/‘/g, "'")
-    .replace(/’/g, "'")
-    .replace(/—/g, " - ");
+  return (
+    formattedText
+      .replace(/“/g, '"')
+      .replace(/”/g, '"')
+      .replace(/‘/g, "'")
+      .replace(/’/g, "'")
+      .replace(/—/g, " - ")
+      .replace(/…/g, "...")
+      // Finally look for any double spaces created by edge cases and remove them
+      .replace(/  +/g, " ")
+  );
 }

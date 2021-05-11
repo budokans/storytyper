@@ -5,6 +5,7 @@ import helmet from "helmet";
 import { scrapeStories } from "./lib/scraper";
 import "./lib/cron";
 import { connect, getDb } from "./lib/db";
+import "dotenv/config";
 
 const hostname = "127.0.0.1";
 const port = process.env.PORT;

@@ -5,7 +5,7 @@ import formatStoryText from "./formatStoryText";
 import { getDb } from "./db";
 
 let pageCount = 0;
-// let pageLimit = 25;
+let pageLimit = 10;
 
 // Get the HTML of the page to be scraped
 async function getHTML(url) {
@@ -104,8 +104,8 @@ export async function scrapeStories(url, newestStoryId) {
   // If it's not the last page and the scraper has yet to encounter the newest scrape present in the database, then scrape next page and concatenate scrapes with those all scraped. N.B.: pageLimit check only for dev purposes.
   if (
     storiesFragment.nextPage &&
-    !storiesFragment.upToDate
-    // && pageCount < pageLimit
+    !storiesFragment.upToDate &&
+    pageCount < pageLimit
   ) {
     const {
       stories: nextPageStories,
