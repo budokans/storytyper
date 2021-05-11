@@ -7,7 +7,6 @@ import "./lib/cron";
 import { connect, getDb } from "./lib/db";
 import "dotenv/config";
 
-const hostname = "127.0.0.1";
 const port = process.env.PORT;
 
 const app = express();
@@ -24,7 +23,7 @@ connect((err) => {
       if (err) {
         throw err;
       }
-      console.log(`App running at http://${hostname}:${port}/`);
+      console.log(`App running at http://localhost:${port}/`);
     });
   }
 });
