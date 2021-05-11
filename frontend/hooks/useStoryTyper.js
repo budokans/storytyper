@@ -28,6 +28,7 @@ export default function useStoryTyper() {
   const [batchRequest, setBatchRequest] = useState(0);
   const [storiesAreLoaded, setStoriesAreLoaded] = useState(false);
   const [dbCount, setDbCount] = useState(0);
+  const [firstPlayOnNewLevel, setFirstPlayOnNewLevel] = useState(true);
 
   async function getDbData(url) {
     const { data } = await axios.get(url);
@@ -109,6 +110,7 @@ export default function useStoryTyper() {
 
   function startGame() {
     !isRunning && !gameIsOver && currentStory && setIsRunning(true);
+    setFirstPlayOnNewLevel(false); // Removes the level-up class from timer
   }
 
   // Pass 'start on keypress' handler to onkeypress method when document has loaded
@@ -283,8 +285,10 @@ export default function useStoryTyper() {
     if (playerShouldLevelUp) {
       setLevel(level + 1);
       setGameTimeRemaining(difficulties[level + 1].seconds);
+      setFirstPlayOnNewLevel(true);
     } else {
       setGameTimeRemaining(difficulties[level].seconds);
+      setFirstPlayOnNewLevel(false);
     }
 
     setTimeLeftOver(0);
@@ -329,5 +333,6 @@ export default function useStoryTyper() {
     playerShouldLevelUp,
     handleToggleModal,
     storiesAreLoaded,
+    firstPlayOnNewLevel,
   ];
 }
