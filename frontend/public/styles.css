@@ -1,10 +1,7 @@
-@import "../node_modules/normalize.css/normalize.css";
-
 /**
  * CONTENTS
  *
- * Normalize.css........A level playing field.
- * More resets..........Personal resets in addition to normalize.css
+ * Resets..........Personal resets in addition to normalize.css
  * Variables............Custom color properties
  * Base.................Body element styles
  * Header...............Header and subtext styles
@@ -28,7 +25,7 @@
 /*------------------------------------*\
   #FONTS
 \*------------------------------------*/
- @font-face {
+ /* @font-face {
   font-family: 'Press Start 2P';
   src: url('./fonts/PressStart2P-Regular.eot');
   src: url('./fonts/PressStart2P-Regular.eot?#iefix') format('embedded-opentype'),
@@ -39,7 +36,7 @@
   font-weight: normal;
   font-style: normal;
   font-display: swap;
-}
+} */
 
 
 
