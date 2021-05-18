@@ -17,9 +17,8 @@ export default function useStoryTyper() {
   const [highScore, setHighScore] = useState(0);
   const textareaRef = useRef();
   const [errorPresent, setErrorPresent] = useState(false);
-  const [inefficientKeyStrokesCount, setInefficientKeyStrokesCount] = useState(
-    0
-  );
+  const [inefficientKeyStrokesCount, setInefficientKeyStrokesCount] =
+    useState(0);
   const [timeLeftOver, setTimeLeftOver] = useState(0);
   const gameIsOver = gameTimeRemaining === 0 || timeLeftOver > 0 ? true : false;
   const [gameOverModalClosed, setGameOverModalClosed] = useState(false);

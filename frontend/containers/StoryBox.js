@@ -19,11 +19,11 @@ export default function StoryBoxContainer({ currentStory, gameIsOver }) {
     <div className={wrapperClass}>
       {!currentStory ? (
         <Loader
-          type="Circles"
+          type="Audio"
           color="#00FF00"
-          height={80}
-          width={80}
-          timeout={3000}
+          height={60}
+          width={60}
+          timeout={10000}
           className="gameplay-box--story__spinner"
         />
       ) : (
