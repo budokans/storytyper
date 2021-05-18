@@ -1,6 +1,7 @@
 import { ThemeContextProvider } from "../context/themeContext";
 import PropTypes from "prop-types";
 import ClientOnly from "../components/ClientOnly";
+import "../node_modules/normalize.css/normalize.css";
 import "../public/styles.css";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
