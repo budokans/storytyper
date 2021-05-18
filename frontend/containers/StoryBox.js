@@ -23,7 +23,7 @@ export default function StoryBoxContainer({ currentStory, gameIsOver }) {
           color="#00FF00"
           height={60}
           width={60}
-          timeout={10000}
+          // timeout={10000}
           className="gameplay-box--story__spinner"
         />
       ) : (
