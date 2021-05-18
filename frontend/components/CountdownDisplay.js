@@ -18,7 +18,7 @@ function Countdown({ countdown, isRunning }) {
     "countdown-text--collapsed": !isRunning,
   });
 
-  return <h3 className={countdownClass}>{countdownDisplayText()}</h3>;
+  return <h2 className={countdownClass}>{countdownDisplayText()}</h2>;
 }
 
 Countdown.propTypes = {
