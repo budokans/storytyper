@@ -50,17 +50,24 @@ app.get("/data", async (req, res) => {
 
   console.log(`${utc}: Getting stories from database...`);
 
-  const db = getDb("storytyper");
+  const batchRequest = parseInt(req.query.batch);
+  const batchRequestIsNumber = !isNaN(batchRequest);
 
-  const skipMultiplier = 10;
-  const batchRequest = req.query.batch;
-  const skipVal = skipMultiplier * batchRequest;
+  if (batchRequestIsNumber) {
+    try {
+      const db = getDb("storytyper");
+      const skipMultiplier = 10;
+      const skipVal = skipMultiplier * batchRequest;
 
-  const cursor = await db.collection("stories").find().sort({ _id: -1 });
-  const batch = await cursor.skip(skipVal).limit(skipMultiplier);
-  const stories = await batch.toArray();
+      const cursor = await db.collection("stories").find().sort({ _id: -1 });
+      const batch = await cursor.skip(skipVal).limit(skipMultiplier);
+      const stories = await batch.toArray();
 
-  res.json(stories);
+      res.json(stories);
+    } catch (err) {
+      console.log(err);
+    }
+  }
 });
 
 app.get("/count", async (req, res) => {
