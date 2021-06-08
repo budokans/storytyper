@@ -2,15 +2,21 @@ import express from "express";
 import cors from "cors";
 import compression from "compression";
 import helmet from "helmet";
+import "dotenv/config";
+import { connect, getDb } from "./lib/db";
 import { scrapeStories } from "./lib/scraper";
 import "./lib/cron";
-import { connect, getDb } from "./lib/db";
-import "dotenv/config";
 
 const port = process.env.PORT;
-
+const frontendURL = process.env.FRONTEND_URL;
 const app = express();
-app.use(cors());
+
+app.use(
+  cors({
+    origin: frontendURL,
+    optionsSuccessStatus: 200,
+  })
+);
 app.use(compression());
 app.use(helmet());
 
