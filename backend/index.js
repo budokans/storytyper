@@ -35,13 +35,16 @@ connect((err) => {
 });
 
 app.get("/scrape", async (req, res) => {
-  console.log("Scraping!");
-
-  const storiesData = await scrapeStories(
-    "http://fiftywordstories.com/category/stories/"
-  );
-  const { stories } = storiesData;
-  res.json(stories);
+  try {
+    console.log("Scraping!");
+    const storiesData = await scrapeStories(
+      "http://fiftywordstories.com/category/stories/"
+    );
+    const { stories } = storiesData;
+    res.json(stories);
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 app.get("/data", async (req, res) => {
