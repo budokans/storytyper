@@ -74,11 +74,14 @@ app.get("/count", async (req, res) => {
   const date = new Date();
   const utc = date.toUTCString();
 
-  const db = getDb("storytyper");
-  const storiesCollection = db.collection("stories");
-  const storiesCount = await storiesCollection.countDocuments();
+  try {
+    const db = getDb("storytyper");
+    const storiesCollection = db.collection("stories");
+    const storiesCount = await storiesCollection.countDocuments();
 
-  console.log(`${utc}: Getting documents count... count = ${storiesCount}`);
-
-  res.json({ count: storiesCount });
+    res.json({ count: storiesCount });
+    console.log(`${utc}: Documents count = ${storiesCount}`);
+  } catch (err) {
+    console.log(err);
+  }
 });
