@@ -6,14 +6,13 @@ import Button from "./Button";
 import Modal from "./Modal";
 import difficulties from "../difficulties.json";
 
-function Difficulty(props) {
-  const {
-    level,
-    gameOverModalClosed,
-    playerShouldLevelUp,
-    gameIsOver,
-    isRunning,
-  } = props;
+const Difficulty = ({
+  level,
+  gameOverModalClosed,
+  playerShouldLevelUp,
+  gameIsOver,
+  isRunning,
+}) => {
   const [modalIsShowing, handleToggleModal] = useModalToggler();
 
   // Displays the difficulty level list items
@@ -36,10 +35,7 @@ function Difficulty(props) {
   });
 
   return (
-    <div>
-      <h5 className={`side-panel__header  side-panel__header--${theme}-theme`}>
-        Difficulty
-      </h5>
+    <>
       <Button
         onClick={handleToggleModal}
         buttonClass={`side-panel__btn-modal  side-panel__btn-modal--${theme}-theme`}
@@ -65,8 +61,6 @@ function Difficulty(props) {
         )}
       </h4>
 
-      <hr />
-
       <Modal
         modalIsShowing={modalIsShowing}
         onToggleModal={handleToggleModal}
@@ -77,9 +71,9 @@ function Difficulty(props) {
         </header>
         <ul className="modal__list">{difficultiesList}</ul>
       </Modal>
-    </div>
+    </>
   );
-}
+};
 
 Difficulty.propTypes = {
   level: PropTypes.number.isRequired,
@@ -89,4 +83,4 @@ Difficulty.propTypes = {
   isRunning: PropTypes.bool.isRequired,
 };
 
-export default Difficulty;
+export { Difficulty };

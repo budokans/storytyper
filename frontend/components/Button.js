@@ -2,11 +2,9 @@ import PropTypes from "prop-types";
 
 function Button({ buttonClass, onClick, children, ...props }) {
   return (
-    <>
-      <button className={buttonClass} onClick={onClick} {...props}>
-        {children}
-      </button>
-    </>
+    <button className={buttonClass} onClick={onClick} {...props}>
+      {children}
+    </button>
   );
 }
 

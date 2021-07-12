@@ -1,37 +1,30 @@
 import { useThemeContext } from "../context/themeContext";
 import PropTypes from "prop-types";
 import classNames from "classnames";
-import Difficulty from "./Difficulty";
-import HighScore from "./HighScore";
-import Stats from "./Stats";
-import PlayAgainControls from "./PlayAgainControls";
-import Button from "./Button";
+import { Results } from "../components/Results";
+import { Difficulty } from "../components/Difficulty";
+import HighScore from "../components/HighScore";
+import Stats from "../components/Stats";
+import PlayAgainControls from "../components/PlayAgainControls";
+import Button from "../components/Button";
 
-function ResultsPanel(props) {
-  const {
-    onChangeStory,
-    onRestartClick,
-    onPlayAgainClick,
-    highScore,
-    wpm,
-    cpm,
-    inefficientKeyStrokesCount,
-    isRunning,
-    gameIsOver,
-    efficiency,
-    level,
-    gameOverModalClosed,
-    playerShouldLevelUp,
-    storiesAreLoaded,
-  } = props;
-
+const ResultsContainer = ({
+  onChangeStory,
+  onRestartClick,
+  onPlayAgainClick,
+  highScore,
+  wpm,
+  cpm,
+  inefficientKeyStrokesCount,
+  isRunning,
+  gameIsOver,
+  efficiency,
+  level,
+  gameOverModalClosed,
+  playerShouldLevelUp,
+  storiesAreLoaded,
+}) => {
   const { theme, toggleTheme } = useThemeContext();
-
-  const sidePanelClasses = classNames({
-    "side-panel": true,
-    "shiny-border": theme === "dark",
-    "side-panel--light-theme": theme === "light",
-  });
 
   const themeButtonClasses = classNames({
     "side-panel__btn-controls": true,
@@ -40,21 +33,32 @@ function ResultsPanel(props) {
   });
 
   return (
-    <section className={sidePanelClasses}>
-      <Difficulty
-        level={level}
-        gameOverModalClosed={gameOverModalClosed}
-        playerShouldLevelUp={playerShouldLevelUp}
-        gameIsOver={gameIsOver}
-        isRunning={isRunning}
-      />
+    <Results>
+      <Results.Section>
+        <Results.Header>Difficulty</Results.Header>
 
-      <HighScore
-        highScore={highScore}
-        wpm={wpm}
-        gameOverModalClosed={gameOverModalClosed}
-        gameIsOver={gameIsOver}
-      />
+        <Difficulty
+          level={level}
+          gameOverModalClosed={gameOverModalClosed}
+          playerShouldLevelUp={playerShouldLevelUp}
+          gameIsOver={gameIsOver}
+          isRunning={isRunning}
+        />
+      </Results.Section>
+
+      <Results.Divider />
+
+      <Results.Section>
+        <Results.Header>High Score</Results.Header>
+        <HighScore
+          highScore={highScore}
+          wpm={wpm}
+          gameOverModalClosed={gameOverModalClosed}
+          gameIsOver={gameIsOver}
+        />
+      </Results.Section>
+
+      <Results.Divider />
 
       <Stats
         wpm={wpm}
@@ -76,11 +80,11 @@ function ResultsPanel(props) {
       <Button onClick={toggleTheme} buttonClass={themeButtonClasses}>
         {`${theme === "dark" ? "Light" : "Dark"} Theme`}
       </Button>
-    </section>
+    </Results>
   );
-}
+};
 
-ResultsPanel.propTypes = {
+ResultsContainer.propTypes = {
   onChangeStory: PropTypes.func,
   onRestartClick: PropTypes.func,
   onPlayAgainClick: PropTypes.func,
@@ -97,4 +101,4 @@ ResultsPanel.propTypes = {
   storiesAreLoaded: PropTypes.bool.isRequired,
 };
 
-export default ResultsPanel;
+export { ResultsContainer };

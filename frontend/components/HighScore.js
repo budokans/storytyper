@@ -22,10 +22,7 @@ function HighScore({ highScore, wpm, gameOverModalClosed, gameIsOver }) {
   const { theme } = useThemeContext();
 
   return (
-    <div>
-      <h5 className={`side-panel__header  side-panel__header--${theme}-theme`}>
-        High Score
-      </h5>
+    <>
       <h4 className={highScoreDisplayClass}>
         {getHighScoreDisplay()}
         {gameIsOver && wpm > highScore && (
@@ -37,8 +34,7 @@ function HighScore({ highScore, wpm, gameOverModalClosed, gameIsOver }) {
           <i className="ri-subtract-line  failure"></i>
         )}
       </h4>
-      <hr />
-    </div>
+    </>
   );
 }
 

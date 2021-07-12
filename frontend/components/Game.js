@@ -5,7 +5,7 @@ import CountdownDisplay from "../components/CountdownDisplay";
 import TypingBox from "../components/TypingBox";
 import GameTimeDisplay from "../components/GameTimeDisplay";
 import Modal from "../components/Modal";
-import ResultsPanel from "../components/ResultsPanel";
+import { ResultsContainer } from "../containers/results";
 // For development
 import difficulties from "../difficulties.json";
 // Hooks & Context
@@ -99,7 +99,7 @@ export default function Home() {
           />
         </section>
 
-        <ResultsPanel
+        <ResultsContainer
           onChangeStory={handleNextStoryClick}
           onRestartClick={handleRestartClick}
           onPlayAgainClick={handlePlayAgainClick}
